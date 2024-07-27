@@ -182,7 +182,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
 
     public void loadSanPham() {
         model = (DefaultTableModel) tblSanPham.getModel();
-        List<SanPham> list = sanPhamService.getAll();
+        List<SanPham> list = sanPhamService.getAllSPBH();
         model.setRowCount(0);
         for (SanPham sp : list) {
             model.addRow(new Object[]{sp.getId_SPCT(), sp.getTenSanPham(), sp.getSoluongtonkho(), sp.getGia(), sp.getTenThuongHieu(), sp.getTenNSX(), sp.getTenChatLieu(), sp.getTenKichThuoc(), sp.getTenKhoa(), sp.getKieuDang(), sp.getTenMauSac()});
@@ -213,7 +213,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
         List<SanPham> gioHang = gioHangMap.get(idHD);
         if (gioHang != null) {
             for (SanPham sp : gioHang) {
-                int id = sp.getId_sanPham();
+                int id = sp.getId_SPCT();
                 int soLuongTraLai = sp.getSoluongtonkho();
                 int rowCount = tblSanPham.getRowCount();
                 for (int i = 0; i < rowCount; i++) {
@@ -303,6 +303,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
         int selectedRow = tblHoaDonCho.getSelectedRow();
         if (selectedRow >= 0) {
             int idHD = Integer.parseInt(tblHoaDonCho.getValueAt(selectedRow, 0).toString());
+
             String tenNV = String.valueOf(cboTenNV.getSelectedItem());
             String loaiTT = String.valueOf(cboHTTT.getSelectedItem());
             String tenKH = txtTenKhachHang.getText();
@@ -313,7 +314,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
                 List<SanPham> gioHang = gioHangMap.get(idHD);
                 if (gioHang != null) {
                     for (SanPham sp : gioHang) {
-                        hoaDonService.themChiTietHoaDon(idHD, sp);
+                        hoaDonService.addHDCT(idHD, sp);
                     }
                 }
                 DefaultTableModel dtmHoaDon = (DefaultTableModel) tblHoaDonCho.getModel();
@@ -681,7 +682,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID SẢN PHẨM", "TÊN SẢN PHẨM ", "SỐ LƯỢNG", "ĐƠN GIÁ ", "THƯƠNG HIỆU ", "NHÀ SẢN XUẤT", "CHẤT LIỆU", "KÍCH THƯỚC", "LOẠI KHÓA", "KIỂU DÁNG", "MÀU SẮC"
+                "ID SPCT", "TÊN SẢN PHẨM ", "SỐ LƯỢNG", "ĐƠN GIÁ ", "THƯƠNG HIỆU ", "NHÀ SẢN XUẤT", "CHẤT LIỆU", "KÍCH THƯỚC", "LOẠI KHÓA", "KIỂU DÁNG", "MÀU SẮC"
             }
         ));
         tblSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -852,6 +853,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
         if (index != -1) {
             int id = Integer.parseInt(tblHoaDonCho.getValueAt(index, 0).toString());
             List<HoaDon> dsct = hoaDonService.getById(id);
+            capNhatTongTien();
             showTable(dsct);
         }
         String maHoaDon = tblHoaDonCho.getValueAt(index, 1).toString();
@@ -862,7 +864,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
         int index = tblSanPham.getSelectedRow();
         if (index >= 0) {
             int idSP = Integer.valueOf(tblSanPham.getValueAt(tblSanPham.getSelectedRow(), 0).toString());
-            SanPham sp = findSanPhamByID(idSP);
+            SanPham sp = findSanPhamByIdSPCT(idSP);
             if (sp == null) {
                 JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm.", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 return;
@@ -897,9 +899,6 @@ public class formBanHangChinh extends javax.swing.JPanel {
             addSanPhamToGioHang(idHD, sp, soLuongThem);
             tblSanPham.setValueAt(soLuongHienCo - soLuongThem, index, 2);
             sanPhamService.updateSanPhamSoLuong(idSP, soLuongHienCo - soLuongThem);
-//            int gia = Integer.valueOf(tblSanPham.getValueAt(tblSanPham.getSelectedRow(), 3).toString());
-//            HoaDon hd = new HoaDon(idHD, sp.getId_sanPham(), sp.getTenSanPham(), soLuongThem, gia, soLuongThem * gia);
-//            hoaDonService.addHDCT(hd,sp);
             updateGioHangTable(idHD);
             capNhatTongTien();
         } else {
@@ -908,12 +907,13 @@ public class formBanHangChinh extends javax.swing.JPanel {
     }//GEN-LAST:event_tblSanPhamMouseClicked
 
     private void tblHDCTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHDCTMouseClicked
-        // TODO add your handling code here:
         int index = tblHDCT.getSelectedRow();
         if (index >= 0) {
-            int idSP = Integer.valueOf(tblHDCT.getValueAt(index, 1).toString());
+            int idSPCT = Integer.parseInt(tblSanPham.getValueAt(tblSanPham.getSelectedRow(), 0).toString());
+            System.out.println("Selected id_SPCT: " + idSPCT);
+
             SanPham sp = sanPhamRepo.stream()
-                    .filter(s -> s.getId_sanPham() == idSP)
+                    .filter(s -> s.getId_SPCT() == idSPCT)
                     .findFirst()
                     .orElse(null);
             if (sp == null) {
@@ -925,16 +925,17 @@ public class formBanHangChinh extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(null, "Vui lòng chọn một hóa đơn trước khi chọn sản phẩm.", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            int idHD = Integer.valueOf(tblHoaDonCho.getValueAt(selectedHoaDon, 0).toString());
+            int idHD = Integer.parseInt(tblHoaDonCho.getValueAt(selectedHoaDon, 0).toString());
             List<SanPham> spGioHang = gioHangMap.get(idHD);
             if (spGioHang == null) {
                 JOptionPane.showMessageDialog(null, "Không tìm thấy giỏ hàng cho hóa đơn này.", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             SanPham getDongSP = spGioHang.stream()
-                    .filter(s -> s.getId_sanPham() == idSP)
+                    .filter(s -> s.getId_SPCT() == idSPCT)
                     .findFirst()
                     .orElse(null);
+
             if (getDongSP == null) {
                 JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm trong giỏ hàng.", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 return;
@@ -943,6 +944,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
             try {
                 String soLuongTra = JOptionPane.showInputDialog(null, "Nhập số lượng trả lại:");
                 int soLuongTraLai = Integer.parseInt(soLuongTra);
+
                 if (soLuongTraLai <= 0) {
                     JOptionPane.showMessageDialog(null, "Vui lòng nhập số lượng hợp lệ!", "Thông báo", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -961,9 +963,9 @@ public class formBanHangChinh extends javax.swing.JPanel {
                 }
                 int rowCount = tblSanPham.getRowCount();
                 for (int i = 0; i < rowCount; i++) {
-                    int idSanPham = Integer.valueOf(tblSanPham.getValueAt(i, 0).toString());
-                    if (idSanPham == idSP) {
-                        int soLuongHienCoTblSanPham = Integer.valueOf(tblSanPham.getValueAt(i, 2).toString());
+                    int idSanPham = Integer.parseInt(tblSanPham.getValueAt(i, 0).toString());
+                    if (idSanPham == idSPCT) {
+                        int soLuongHienCoTblSanPham = Integer.parseInt(tblSanPham.getValueAt(i, 2).toString());
                         soLuongHienCoTblSanPham += soLuongTraLai;
                         tblSanPham.setValueAt(soLuongHienCoTblSanPham, i, 2);
                         sanPhamService.updateSanPhamSoLuong(idSanPham, soLuongHienCoTblSanPham);
@@ -976,7 +978,10 @@ public class formBanHangChinh extends javax.swing.JPanel {
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Vui lòng nhập một số nguyên hợp lệ!", "Thông báo", JOptionPane.ERROR_MESSAGE);
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "Vui lòng chọn một sản phẩm trong bảng HDCT.", "Thông báo", JOptionPane.WARNING_MESSAGE);
         }
+
     }//GEN-LAST:event_tblHDCTMouseClicked
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
@@ -1056,7 +1061,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
         for (HoaDon hdct : list) {
             dtm.addRow(new Object[]{
                 hdct.getIdHoaDon(),
-                hdct.getIdSanPham(),
+                hdct.getIdSPCT(),
                 hdct.getTenSanPham(),
                 hdct.getSoLuong(),
                 hdct.getGia(),
@@ -1065,9 +1070,9 @@ public class formBanHangChinh extends javax.swing.JPanel {
         }
     }
 
-    private SanPham findSanPhamByID(int idSP) {
+    private SanPham findSanPhamByIdSPCT(Integer idSPCT) {
         return sanPhamRepo.stream()
-                .filter(s -> s.getId_sanPham() == idSP)
+                .filter(sp -> sp.getId_SPCT() == idSPCT)
                 .findFirst()
                 .orElse(null);
     }
@@ -1085,7 +1090,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
     private void addSanPhamToGioHang(int idHD, SanPham sp, int soLuongThem) {
         List<SanPham> gioHang = gioHangMap.computeIfAbsent(idHD, k -> new ArrayList<>());
         boolean isExisted = gioHang.stream()
-                .filter(gioHangSp -> gioHangSp.getId_sanPham() == sp.getId_sanPham())
+                .filter(gioHangSp -> gioHangSp.getId_SPCT() == sp.getId_SPCT())
                 .peek(gioHangSp -> gioHangSp.setSoluongtonkho(gioHangSp.getSoluongtonkho() + soLuongThem))
                 .findFirst()
                 .isPresent();
@@ -1100,6 +1105,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
         dtmGioHang.setRowCount(0);
         List<SanPham> gioHang = gioHangMap.get(idHD);
         idHD = Integer.valueOf(tblHoaDonCho.getValueAt(tblHoaDonCho.getSelectedRow(), 0).toString());
+
         if (gioHang == null) {
             JOptionPane.showMessageDialog(null, "Không tìm thấy giỏ hàng cho hóa đơn này.", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
@@ -1108,7 +1114,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
             for (SanPham gioHangSp : gioHang) {
                 Object[] row = new Object[]{
                     idHD,
-                    gioHangSp.getId_sanPham(),
+                    gioHangSp.getId_SPCT(),
                     gioHangSp.getTenSanPham(),
                     gioHangSp.getSoluongtonkho(),
                     gioHangSp.getGia(),

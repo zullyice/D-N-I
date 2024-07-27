@@ -90,7 +90,7 @@ public class SanPhamService {
     public List<SanPham> getAllSPBH() {
         String sql = """
                      SELECT 
-                         sp.id_sanPham,
+                         spc.id_SPCT,
                          sp.tenSanPham,
                      	    spc.soluongtonkho,
                      spc.gia,

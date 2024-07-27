@@ -120,32 +120,7 @@ public class HoaDonService {
         return searchID;
     }
     
-    public void themChiTietHoaDon(int idhd, SanPham sp) {
-        String sql = """
-                 INSERT INTO [dbo].[HoaDonChiTiet]
-                            ([trangThai]
-                            ,[soLuong]
-                            ,[donGia]
-                            ,[tongTien]
-                            ,[id_hoaDon]
-                            ,[id_SPCT])
-                      VALUES
-                            (?,?,?,?,?,?)
-                 """;
-
-        try (Connection con = DBConnect.getConnection(); PreparedStatement statement = con.prepareStatement(sql)) {
-            statement.setBoolean(1, true);
-            statement.setInt(2, sp.getSoluongtonkho());
-            statement.setDouble(3, sp.getGia());
-            statement.setDouble(4, sp.getSoluongtonkho() * sp.getGia());
-            statement.setInt(5, idhd);
-            statement.setInt(6, sp.getId_sanPham());
-            statement.executeUpdate();
-        } catch (SQLException ex) {
-            System.err.println("Error while inserting invoice details: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-    }
+    
 
     
 
@@ -272,27 +247,29 @@ public class HoaDonService {
         }
         return false;
     }
-    public void addHDCT(HoaDon hdct,SanPham sp) {
+    public void addHDCT(int idHD,SanPham sp) {
         String sql = """
                      INSERT INTO [dbo].[HoaDonChiTiet]
                                 ([id_hoaDon]
                                 ,[id_SPCT]
                                 ,[soLuong]
                                 ,[donGia]
-                                ,[tongTien]
+                                ,[tongTien],
+                                [trangThai]
                                 )
                           VALUES
-                                (?,?,?,?,?)
+                                (?,?,?,?,?,?)
                      """;
         
         try(Connection con = DBConnect.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, hdct.getIdHoaDon());
-            ps.setInt(2, hdct.getIdSanPham());
-            ps.setInt(3, hdct.getSoLuong());
-            ps.setInt(4, hdct.getGia());
-            ps.setInt(5, hdct.getSoLuong()*hdct.getGia());
-            ps.execute();
+            ps.setInt(1, idHD);
+            ps.setInt(2, sp.getId_SPCT());
+            ps.setInt(3, sp.getSoluongtonkho());
+            ps.setInt(4, sp.getGia());
+            ps.setInt(5, sp.getSoluongtonkho()*sp.getGia());
+            ps.setBoolean(6, true);
+            ps.executeUpdate();
         } catch(Exception e) {
             e.printStackTrace();
         }

@@ -46,10 +46,9 @@ public class SanPham {
         this.tenThuongHieu = tenThuongHieu;
     }
 
-    public SanPham(int id_sanPham, String tenSanPham, int soluongtonkho, int gia, String tenThuongHieu, String tenNSX, String tenChatLieu, String tenKichThuoc, String tenKhoa, String kieuDang, String tenMauSac) {
-        this.id_sanPham = id_sanPham;
+    public SanPham(int id_SPCT, String tenSanPham, int soluongtonkho, int gia, String tenThuongHieu, String tenNSX, String tenChatLieu, String tenKichThuoc, String tenKhoa, String kieuDang, String tenMauSac) {
+        this.id_SPCT = id_SPCT;
         this.tenSanPham = tenSanPham;
-        
         this.soluongtonkho = soluongtonkho;
         this.gia = gia;
         this.tenNSX = tenNSX;
