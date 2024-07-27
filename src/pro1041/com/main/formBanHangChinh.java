@@ -220,7 +220,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
                     int idSP = Integer.valueOf(tblSanPham.getValueAt(i, 0).toString());
                     if (id == idSP) {
                         int soLuongHienCoSP = Integer.parseInt(tblSanPham.getValueAt(i, 2).toString());
-                        soLuongHienCoSP += soLuongTraLai; 
+                        soLuongHienCoSP += soLuongTraLai;
                         tblSanPham.setValueAt(soLuongHienCoSP, i, 2);
                         sanPhamService.updateSanPhamSoLuong(id, soLuongHienCoSP);
                         break;
@@ -897,6 +897,9 @@ public class formBanHangChinh extends javax.swing.JPanel {
             addSanPhamToGioHang(idHD, sp, soLuongThem);
             tblSanPham.setValueAt(soLuongHienCo - soLuongThem, index, 2);
             sanPhamService.updateSanPhamSoLuong(idSP, soLuongHienCo - soLuongThem);
+//            int gia = Integer.valueOf(tblSanPham.getValueAt(tblSanPham.getSelectedRow(), 3).toString());
+//            HoaDon hd = new HoaDon(idHD, sp.getId_sanPham(), sp.getTenSanPham(), soLuongThem, gia, soLuongThem * gia);
+//            hoaDonService.addHDCT(hd,sp);
             updateGioHangTable(idHD);
             capNhatTongTien();
         } else {
@@ -965,7 +968,6 @@ public class formBanHangChinh extends javax.swing.JPanel {
                         tblSanPham.setValueAt(soLuongHienCoTblSanPham, i, 2);
                         sanPhamService.updateSanPhamSoLuong(idSanPham, soLuongHienCoTblSanPham);
                         ((DefaultTableModel) tblSanPham.getModel()).fireTableDataChanged();
-                        
                         break;
                     }
                 }

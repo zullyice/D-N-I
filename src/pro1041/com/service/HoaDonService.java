@@ -95,7 +95,7 @@ public class HoaDonService {
                                   FROM dbo.HoaDonChiTiet hdct
                                   JOIN SanPham sp ON sp.id_sanPham = hdct.id_SPCT
                                   LEFT JOIN HoaDon hd ON hdct.id_hoaDon = hd.id_hoaDon
-                 				 INNER JOIN SanPhamChiTiet spct ON spct.id_SPCT = hdct.id_SPCT
+                                  INNER JOIN SanPhamChiTiet spct ON spct.id_SPCT = hdct.id_SPCT
                                   WHERE hd.id_hoaDon = ?
                  """;
         try (Connection con = DBConnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -119,7 +119,7 @@ public class HoaDonService {
         }
         return searchID;
     }
-
+    
     public void themChiTietHoaDon(int idhd, SanPham sp) {
         String sql = """
                  INSERT INTO [dbo].[HoaDonChiTiet]
@@ -271,5 +271,30 @@ public class HoaDonService {
             e.printStackTrace();
         }
         return false;
+    }
+    public void addHDCT(HoaDon hdct,SanPham sp) {
+        String sql = """
+                     INSERT INTO [dbo].[HoaDonChiTiet]
+                                ([id_hoaDon]
+                                ,[id_SPCT]
+                                ,[soLuong]
+                                ,[donGia]
+                                ,[tongTien]
+                                )
+                          VALUES
+                                (?,?,?,?,?)
+                     """;
+        
+        try(Connection con = DBConnect.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, hdct.getIdHoaDon());
+            ps.setInt(2, hdct.getIdSanPham());
+            ps.setInt(3, hdct.getSoLuong());
+            ps.setInt(4, hdct.getGia());
+            ps.setInt(5, hdct.getSoLuong()*hdct.getGia());
+            ps.execute();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }

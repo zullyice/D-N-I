@@ -27,6 +27,7 @@ public class HoaDon {
     private Date ngayTaoHD;
     private Date ngayTaoSP;
     private int gia;
+    private int idSPCT;
 
     public HoaDon() {
     }
@@ -58,6 +59,15 @@ public class HoaDon {
         this.tenKhachHang = tenKhachHang;
         this.loaiTT = loaiTT;
     }
+
+    public HoaDon(int idHoaDon, int idSanPham, String tenSanPham, int soLuong, int gia,int tongTien) {
+        this.idHoaDon = idHoaDon;
+        this.idSanPham = idSanPham;
+        this.tenSanPham = tenSanPham;
+        this.soLuong = soLuong;
+        this.gia = gia;
+        this.tongTien = tongTien;
+    }
     
 
     
@@ -78,6 +88,14 @@ public class HoaDon {
         this.tongTien = tongTien;
         this.ngayTaoHD = ngayTaoHD;
         this.ngayTaoSP = ngayTaoSP;
+    }
+
+    public int getIdSPCT() {
+        return idSPCT;
+    }
+
+    public void setIdSPCT(int idSPCT) {
+        this.idSPCT = idSPCT;
     }
 
     public int getIdHoaDon() {
