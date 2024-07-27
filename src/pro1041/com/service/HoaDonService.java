@@ -121,7 +121,6 @@ public class HoaDonService {
     }
 
     public void themChiTietHoaDon(int idhd, SanPham sp) {
-        // Proceed with insert if validation passes
         String sql = """
                  INSERT INTO [dbo].[HoaDonChiTiet]
                             ([trangThai]
@@ -147,6 +146,8 @@ public class HoaDonService {
             ex.printStackTrace();
         }
     }
+
+    
 
     public int updateTrangThaiHoaDon(int idHoaDon, boolean trangThai, HoaDon hoaDon) {
         String sql = "UPDATE HoaDon SET TrangThai = ?, id_nhanVien = ?, id_HTTT = ?, id_khachHang = ? WHERE id_hoaDon = ?";
@@ -255,12 +256,13 @@ public class HoaDonService {
         }
         return model;
     }
+
     public boolean checkIdTrung(String tenHD) {
         String sql = "SELECT COUNT(*) AS count FROM dbo.HoaDon WHERE tenHoaDon = ?";
         try (Connection conn = DBConnect.getConnection(); PreparedStatement pst = conn.prepareCall(sql)) {
 
             pst.setObject(1, tenHD);
-            ResultSet rs = pst.executeQuery();  
+            ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 int count = rs.getInt("count");
                 return count > 0;

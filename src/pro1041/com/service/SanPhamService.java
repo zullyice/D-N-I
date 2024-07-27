@@ -86,6 +86,7 @@ public class SanPhamService {
         }
         return null;
     }
+
     public List<SanPham> getAllSPBH() {
         String sql = """
                      SELECT 
@@ -340,7 +341,7 @@ public class SanPhamService {
     }
 
     public int addSP(SanPham sanPham) {
-        
+
         String sql = """
                  INSERT INTO [dbo].[SanPham]
                             (
@@ -353,8 +354,7 @@ public class SanPhamService {
                             (?,?,?,?,?)
                  """;
         try (Connection con = DBConnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            
-            
+
             String getIDNSXuat = "SELECT id_NSX FROM [NhaSanXuat] WHERE tenNSX LIKE ?";
             PreparedStatement getIDNSX = con.prepareStatement(getIDNSXuat);
             getIDNSX.setString(1, "%" + sanPham.getTenNSX() + "%");
@@ -388,7 +388,7 @@ public class SanPhamService {
     }
 
     public int updateSP(int id, SanPham sanPham) {
-        
+
         String sql = """
                 UPDATE [dbo].[SanPham]
                     SET 
@@ -399,9 +399,8 @@ public class SanPhamService {
                        ,[id_NSX] = ?
                   WHERE id_sanPham = ?
                  """;
-        try (Connection con = DBConnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql);
-                ) {
-            
+        try (Connection con = DBConnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql);) {
+
             String getIDNSXuat = "SELECT id_NSX FROM [NhaSanXuat] WHERE tenNSX LIKE ?";
             PreparedStatement getIDNSX = con.prepareStatement(getIDNSXuat);
             getIDNSX.setString(1, "%" + sanPham.getTenNSX() + "%");
@@ -540,7 +539,7 @@ public class SanPhamService {
         return 0;
     }
 
-    public int update(int id,SanPham sanPham) {
+    public int update(int id, SanPham sanPham) {
         String sql = """
                  UPDATE [dbo].[SanPhamChiTiet]
                     SET [id_chatLieu] = ?
@@ -643,6 +642,7 @@ public class SanPhamService {
             return false;
         }
     }
+
     public void updateSanPhamSoLuong(int id, int soLuongMoi) {
         String sql = "UPDATE SanPhamChiTiet SET soluongtonkho = ? WHERE id_SPCT = ?";
         try (Connection con = DBConnect.getConnection(); PreparedStatement statement = con.prepareStatement(sql)) {
@@ -654,18 +654,5 @@ public class SanPhamService {
             JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật số lượng sản phẩm trong cơ sở dữ liệu.", "Lỗi cập nhật", JOptionPane.ERROR_MESSAGE);
         }
     }
-    private String getTenSanPham(int idSanPham) {
-        String tenSanPham = null;
-        String sql = "SELECT tenSanPham FROM SanPham WHERE id_sanPham = ?";
-        try (Connection con = DBConnect.getConnection(); PreparedStatement statement = con.prepareStatement(sql)) {
-            statement.setInt(1, idSanPham);
-            ResultSet rs = statement.executeQuery();
-            if (rs.next()) {
-                tenSanPham = rs.getString("tenSanPham");
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return tenSanPham;
-    }
+    
 }

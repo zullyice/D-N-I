@@ -30,6 +30,11 @@ public class SanPham {
     public SanPham() {
     }
 
+    public SanPham(int id_sanPham, int soluongtonkho) {
+        this.id_sanPham = id_sanPham;
+        this.soluongtonkho = soluongtonkho;
+    }
+
    
 
     public SanPham(int id_sanPham, String tenSanPham, Date ngayTao, Date ngaySua, String tenNSX, String tenThuongHieu) {
