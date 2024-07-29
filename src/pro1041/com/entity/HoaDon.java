@@ -43,7 +43,7 @@ public class HoaDon {
         this.ngayTaoHD = ngayTaoHD;
     }
 
-    public HoaDon(String maHDCT,String tenSanPham,  int soLuong,int gia,int tongTien, Date ngayTaoHD, Date ngayTaoSP) {
+    public HoaDon(String tenSanPham,  int soLuong,int gia,int tongTien, Date ngayTaoHD, Date ngayTaoSP) {
         this.tenSanPham = tenSanPham;
         this.maHDCT = maHDCT;
         this.soLuong = soLuong;

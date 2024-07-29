@@ -56,7 +56,7 @@ public class HoaDonService {
 
     public List<HoaDon> getAllSP() {
         String sql = """
-                     SELECT[maHDCT]
+                     SELECT
                      sp.tenSanPham
                      ,hdct.soLuong
                      ,spct.gia
@@ -72,7 +72,7 @@ public class HoaDonService {
             ResultSet rs = ps.executeQuery();
             List<HoaDon> dshdct = new ArrayList<>();
             while (rs.next()) {
-                HoaDon hdct = new HoaDon(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getDate(6), rs.getDate(7));
+                HoaDon hdct = new HoaDon( rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getDate(5), rs.getDate(6));
                 dshdct.add(hdct);
             }
             return dshdct;
@@ -85,28 +85,32 @@ public class HoaDonService {
     public List<HoaDon> getById(int idhd) {
         List<HoaDon> searchID = new ArrayList<>();
         String sql = """
-                 SELECT hdct.maHDCT
-                                       , sp.tenSanPham
-                                       , hdct.soLuong
-                                        ,spct.gia
-                                       , hdct.tongTien
-                                       , hd.ngayTao
-                                       , sp.ngayTao
-                                  FROM dbo.HoaDonChiTiet hdct
-                                  JOIN SanPham sp ON sp.id_sanPham = hdct.id_SPCT
-                                  LEFT JOIN HoaDon hd ON hdct.id_hoaDon = hd.id_hoaDon
-                                  INNER JOIN SanPhamChiTiet spct ON spct.id_SPCT = hdct.id_SPCT
-                                  WHERE hd.id_hoaDon = ?
+                 	 SELECT 
+                     sp.tenSanPham,
+                     hdct.soLuong,
+                     hdct.donGia,
+                     hdct.tongTien,
+                     hd.ngayTao ,
+                     sp.ngayTao 
+                 FROM 
+                     dbo.HoaDonChiTiet hdct
+                 INNER JOIN 
+                     HoaDon hd ON hdct.id_hoaDon = hd.id_hoaDon
+                 LEFT JOIN 
+                     SanPhamChiTiet spct ON hdct.id_SPCT = spct.id_SPCT
+                 LEFT JOIN 
+                     SanPham sp ON spct.id_sanPham = sp.id_sanPham
+                 WHERE 
+                     hd.id_hoaDon = ?;
                  """;
         try (Connection con = DBConnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idhd);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     HoaDon hdct = new HoaDon(
-                            rs.getString("maHDCT"),
                             rs.getString("tenSanPham"),
                             rs.getInt("soLuong"),
-                            rs.getInt("gia"),
+                            rs.getInt("donGia"),
                             rs.getInt("tongTien"),
                             rs.getDate("ngayTao"),
                             rs.getDate("ngayTao")
@@ -119,10 +123,6 @@ public class HoaDonService {
         }
         return searchID;
     }
-    
-    
-
-    
 
     public int updateTrangThaiHoaDon(int idHoaDon, boolean trangThai, HoaDon hoaDon) {
         String sql = "UPDATE HoaDon SET TrangThai = ?, id_nhanVien = ?, id_HTTT = ?, id_khachHang = ? WHERE id_hoaDon = ?";
@@ -216,7 +216,7 @@ public class HoaDonService {
         try {
             String query = """
                            SELECT [tenKM]
-                             FROM [dbo].[KhuyenMai]
+                             FROM [dbo].[KhuyenMai] WHERE trangThai = 1
                            """;
             Connection cn = DBConnect.getConnection();
             PreparedStatement pst = cn.prepareStatement(query);
@@ -247,7 +247,8 @@ public class HoaDonService {
         }
         return false;
     }
-    public void addHDCT(int idHD,SanPham sp) {
+
+    public void addHDCT(int idHD, SanPham sp) {
         String sql = """
                      INSERT INTO [dbo].[HoaDonChiTiet]
                                 ([id_hoaDon]
@@ -260,18 +261,20 @@ public class HoaDonService {
                           VALUES
                                 (?,?,?,?,?,?)
                      """;
-        
-        try(Connection con = DBConnect.getConnection();
-                PreparedStatement ps = con.prepareStatement(sql)) {
+
+        try (Connection con = DBConnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idHD);
             ps.setInt(2, sp.getId_SPCT());
             ps.setInt(3, sp.getSoluongtonkho());
             ps.setInt(4, sp.getGia());
-            ps.setInt(5, sp.getSoluongtonkho()*sp.getGia());
+            ps.setInt(5, sp.getSoluongtonkho() * sp.getGia());
             ps.setBoolean(6, true);
             ps.executeUpdate();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    
+
 }

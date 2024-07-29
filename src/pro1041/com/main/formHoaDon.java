@@ -57,9 +57,10 @@ public class formHoaDon extends javax.swing.JPanel {
     void showTable(List<HoaDon> list) {
         tbm = (DefaultTableModel) tblHoaDonChiTiet.getModel();
         tbm.setRowCount(0);
+        int stt = 1;
         for (HoaDon hdct : list) {
             tbm.addRow(new Object[]{
-                hdct.getMaHDCT(),
+                stt++,
                 hdct.getTenSanPham(),
                 hdct.getSoLuong(),
                 hdct.getGia(),
@@ -127,7 +128,7 @@ public class formHoaDon extends javax.swing.JPanel {
 
             },
             new String [] {
-                "MÃ HDCT", "TÊN SẢN PHẨM", "SỐ LƯỢNG", "GIÁ", "TỔNG TIỀN", "NGÀY TẠO HÓA ĐƠN ", "NGÀY TẠO SẢN PHẨM"
+                "STT", "TÊN SẢN PHẨM", "SỐ LƯỢNG", "GIÁ", "TỔNG TIỀN", "NGÀY TẠO HÓA ĐƠN ", "NGÀY TẠO SẢN PHẨM"
             }
         ));
         tblHoaDonChiTiet.addMouseListener(new java.awt.event.MouseAdapter() {

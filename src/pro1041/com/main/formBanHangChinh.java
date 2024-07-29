@@ -227,10 +227,8 @@ public class formBanHangChinh extends javax.swing.JPanel {
                     }
                 }
             }
-            // Xóa giỏ hàng sau khi trả lại sản phẩm
             gioHangMap.remove(idHD);
         }
-        // Cập nhật lại bảng sản phẩm
         ((DefaultTableModel) tblSanPham.getModel()).fireTableDataChanged();
     }
 
@@ -856,15 +854,15 @@ public class formBanHangChinh extends javax.swing.JPanel {
             capNhatTongTien();
             showTable(dsct);
         }
-        String maHoaDon = tblHoaDonCho.getValueAt(index, 1).toString();
-        txtTenHD.setText(maHoaDon);
+        String tenHD = tblHoaDonCho.getValueAt(index, 1).toString();
+        txtTenHD.setText(tenHD);
     }//GEN-LAST:event_tblHoaDonChoMouseClicked
 
     private void tblSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSanPhamMouseClicked
         int index = tblSanPham.getSelectedRow();
         if (index >= 0) {
-            int idSP = Integer.valueOf(tblSanPham.getValueAt(tblSanPham.getSelectedRow(), 0).toString());
-            SanPham sp = findSanPhamByIdSPCT(idSP);
+            int idSPCT = Integer.valueOf(tblSanPham.getValueAt(tblSanPham.getSelectedRow(), 0).toString());
+            SanPham sp = findSanPhamByIdSPCT(idSPCT);
             if (sp == null) {
                 JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm.", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 return;
@@ -896,9 +894,10 @@ public class formBanHangChinh extends javax.swing.JPanel {
                 return;
             }
             int idHD = Integer.valueOf(tblHoaDonCho.getValueAt(selectedHoaDon, 0).toString());
+            
             addSanPhamToGioHang(idHD, sp, soLuongThem);
             tblSanPham.setValueAt(soLuongHienCo - soLuongThem, index, 2);
-            sanPhamService.updateSanPhamSoLuong(idSP, soLuongHienCo - soLuongThem);
+            sanPhamService.updateSanPhamSoLuong(idSPCT, soLuongHienCo - soLuongThem);
             updateGioHangTable(idHD);
             capNhatTongTien();
         } else {
