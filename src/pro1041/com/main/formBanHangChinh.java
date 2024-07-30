@@ -4,6 +4,7 @@
  */
 package pro1041.com.main;
 
+import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,8 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -22,6 +21,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import pro1041.com.entity.HoaDon;
 import pro1041.com.entity.HoaDonCho;
+import pro1041.com.entity.KhachHang;
 import pro1041.com.entity.KhuyenMai;
 import pro1041.com.entity.SanPham;
 import pro1041.com.service.HoaDonService;
@@ -46,6 +46,8 @@ public class formBanHangChinh extends javax.swing.JPanel {
     private NhanVienService nhanVienService = new NhanVienService();
     private Map<Integer, List<SanPham>> gioHangMap = new HashMap<>();
     private List<SanPham> sanPhamRepo = sanPhamService.getAllSPBH();
+    private List<KhachHang> dskh = new ArrayList<>();
+    String maKH;
 
     /**
      * Creates new form formBanHangChinh
@@ -72,14 +74,6 @@ public class formBanHangChinh extends javax.swing.JPanel {
             }
         });
     }
-
-    public boolean isValidPhoneNumber(String sdt) {
-        String regex = "^[0-9]{10}$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(sdt);
-        return matcher.matches();
-    }
-
     private void xoaHoaDonDaThanhToan(int id) {
         DefaultTableModel dtmHoaDon = (DefaultTableModel) tblHoaDonCho.getModel();
         int rowCount = dtmHoaDon.getRowCount();
@@ -356,6 +350,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         txtSdt = new javax.swing.JTextField();
+        btnKhachHang = new java.awt.Button();
         jLabel8 = new javax.swing.JLabel();
         txtTenHD = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
@@ -403,6 +398,15 @@ public class formBanHangChinh extends javax.swing.JPanel {
         jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jLabel7.setText("SỐ ĐIỆN THOẠI");
 
+        btnKhachHang.setBackground(new java.awt.Color(153, 0, 153));
+        btnKhachHang.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnKhachHang.setLabel("CHỌN");
+        btnKhachHang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKhachHangActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -414,22 +418,28 @@ public class formBanHangChinh extends javax.swing.JPanel {
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtTenKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtSdt, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(95, 95, 95))
+                    .addComponent(txtSdt, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTenKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTenKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSdt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtTenKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))
+                        .addGap(22, 22, 22)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtSdt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7)))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(btnKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
 
         jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
@@ -901,7 +911,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
                 return;
             }
             int idHD = Integer.valueOf(tblHoaDonCho.getValueAt(selectedHoaDon, 0).toString());
-            
+
             addSanPhamToGioHang(idHD, sp, soLuongThem);
             tblSanPham.setValueAt(soLuongHienCo - soLuongThem, index, 2);
             sanPhamService.updateSanPhamSoLuong(idSPCT, soLuongHienCo - soLuongThem);
@@ -998,17 +1008,6 @@ public class formBanHangChinh extends javax.swing.JPanel {
                 return;
             }
             double tongTien = tinhTongTienGioHang();
-
-            String tenKhachHang = txtTenKhachHang.getText().trim();
-            String sdt = txtSdt.getText().trim();
-            if (tenKhachHang.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Tên khách hàng không được để trống", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            if (!isValidPhoneNumber(sdt)) {
-                JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
             double giamGia = 0;
             String giaTri = txtGiaTriGiam.getText().trim();
             if (!giaTri.isEmpty()) {
@@ -1039,7 +1038,6 @@ public class formBanHangChinh extends javax.swing.JPanel {
                 DefaultTableModel model = (DefaultTableModel) tblHoaDonCho.getModel();
                 if (index < model.getRowCount()) {
                     try {
-                        khachHangService.ThemKhandSDT(tenKhachHang, sdt);
                         thanhToanHoaDon();
                         JOptionPane.showMessageDialog(null, "Hóa đơn đã được thanh toán.");
                         clearFiel();
@@ -1059,6 +1057,23 @@ public class formBanHangChinh extends javax.swing.JPanel {
     private void txtTongTienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTongTienActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTongTienActionPerformed
+
+    private void btnKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKhachHangActionPerformed
+        // TODO add your handling code here:
+        Frame parent = null;
+        formThemKH fh = new formThemKH(parent, true);
+        fh.setVisible(true);
+        loadKH();
+    }//GEN-LAST:event_btnKhachHangActionPerformed
+    void loadKH() {
+        dskh = khachHangService.selectkh(formThemKH.maKH);
+        for (KhachHang kh : dskh) {
+            txtSdt.setText(kh.getSdt());
+            txtTenKhachHang.setText(kh.getHoTenKh());
+            maKH = kh.getMaKh();
+        }
+
+    }
 
     void showTable(List<HoaDon> list) {
         dtm = (DefaultTableModel) tblHDCT.getModel();
@@ -1133,6 +1148,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApDung;
+    private java.awt.Button btnKhachHang;
     private javax.swing.JButton btnTaoMoiHoaDonCho;
     private javax.swing.JButton btnThanhToan;
     private javax.swing.JButton btnXoaHoaDonCho;

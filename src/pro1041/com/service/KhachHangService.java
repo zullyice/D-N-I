@@ -39,7 +39,31 @@ public class KhachHangService {
         }
         return null;
     }
-    
+
+    public List<KhachHang> selectkh(String makh) {
+        ArrayList<KhachHang> data = new ArrayList<>();
+        String Selete_All_sql = "SELECT * FROM KhachHang WHERE maKh LIKE ?";
+        Connection cn = DBConnect.getConnection();
+        try {
+            PreparedStatement ps = cn.prepareStatement(Selete_All_sql);
+            ps.setString(1, makh);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                KhachHang h = new KhachHang();
+                h.setMaKh(rs.getString("maKh"));
+                h.setHoTenKh(rs.getString("hoTenKh"));
+                h.setDiaChi(rs.getString("diaChi"));
+                h.setSdt(rs.getString("sdt"));
+                h.setEmail(rs.getString("email"));
+                h.setGioiTinh(rs.getString("gioiTinh"));
+                data.add(h);
+            }
+        } catch (Exception e) {
+            System.out.print(e);
+        }
+        return data;
+    }
+
     public int add(KhachHang khachHang) {
         String checkSql = """
                           SELECT COUNT(*) FROM [dbo].[KhachHang] WHERE maKh = ?
@@ -61,7 +85,7 @@ public class KhachHangService {
             pscheck.setString(1, khachHang.getMaKh());
             ResultSet rs = pscheck.executeQuery();
             if (rs.next() && rs.getInt(1) > 0) {
-                JOptionPane.showMessageDialog(null, "Mã khách hàng đã tồn tại " + khachHang.getMaKh() );
+                JOptionPane.showMessageDialog(null, "Mã khách hàng đã tồn tại " + khachHang.getMaKh());
                 return 0;
             }
             ps.setObject(1, khachHang.getMaKh());
@@ -124,6 +148,7 @@ public class KhachHangService {
             return 0;
         }
     }
+
     public void ThemKhandSDT(String tenKhachHang, String sdt) {
         String sqlInsertKhachHang = "INSERT INTO KHACHHANG (hoTenKh, sdt) VALUES (?, ?)";
 
