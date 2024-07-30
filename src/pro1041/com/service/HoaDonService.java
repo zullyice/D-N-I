@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -72,7 +73,7 @@ public class HoaDonService {
             ResultSet rs = ps.executeQuery();
             List<HoaDon> dshdct = new ArrayList<>();
             while (rs.next()) {
-                HoaDon hdct = new HoaDon( rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getDate(5), rs.getDate(6));
+                HoaDon hdct = new HoaDon(rs.getString(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getDate(5), rs.getDate(6));
                 dshdct.add(hdct);
             }
             return dshdct;
@@ -116,6 +117,39 @@ public class HoaDonService {
                             rs.getDate("ngayTao")
                     );
                     searchID.add(hdct);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return searchID;
+    }
+
+    public List<HoaDon> locTheoNgay(Date ngayBD, Date ngayKT) {
+        List<HoaDon> searchID = new ArrayList<>();
+        String sql = """
+                 	SELECT [id_hoaDon]
+                                                   ,[maHoaDon]
+                                                   ,[tenHoaDon]
+                                                    ,hd.trangThai
+                                                    ,hd.ngayTao
+                                                   ,nv.tenNhanVien
+                                                   ,kh.hoTenKh
+                                                   ,tt.loai
+                                               FROM [PRO1041_SD19308].[dbo].[HoaDon] hd
+                                               LEFT JOIN NhanVien nv ON hd.id_nhanVien = nv.id_nhanVien
+                                               LEFT JOIN KhachHang kh	ON hd.id_KhachHang = kh.id_khachHang
+                                               LEFT JOIN ThanhToan tt ON hd.id_HTTT = tt.id_HTTT
+                        WHERE hd.ngayTao BETWEEN ? AND ?
+                 """;
+        try (Connection con = DBConnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setDate(1, new java.sql.Date(ngayBD.getTime()));
+            ps.setDate(2, new java.sql.Date(ngayKT.getTime()));
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    HoaDon hd = new HoaDon(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getBoolean(4), rs.getDate(5), rs.getString(6), rs.getString(7), rs.getString(8));
+                    searchID.add(hd);
                 }
             }
         } catch (Exception e) {
@@ -274,7 +308,5 @@ public class HoaDonService {
             e.printStackTrace();
         }
     }
-
-    
 
 }

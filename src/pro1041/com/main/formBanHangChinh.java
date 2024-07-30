@@ -376,6 +376,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
         btnThanhToan = new javax.swing.JButton();
         btnApDung = new javax.swing.JButton();
         cboKhuyenMai = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblHoaDonCho = new javax.swing.JTable();
@@ -494,6 +495,9 @@ public class formBanHangChinh extends javax.swing.JPanel {
 
         cboKhuyenMai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 17)); // NOI18N
+        jLabel1.setText("%");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -541,7 +545,9 @@ public class formBanHangChinh extends javax.swing.JPanel {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel15)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtGiaTriGiam, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtGiaTriGiam, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel1))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel16)
                                 .addGap(18, 18, 18)
@@ -588,7 +594,8 @@ public class formBanHangChinh extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
-                    .addComponent(txtGiaTriGiam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtGiaTriGiam, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
@@ -908,9 +915,8 @@ public class formBanHangChinh extends javax.swing.JPanel {
     private void tblHDCTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHDCTMouseClicked
         int index = tblHDCT.getSelectedRow();
         if (index >= 0) {
-            int idSPCT = Integer.parseInt(tblSanPham.getValueAt(tblSanPham.getSelectedRow(), 0).toString());
-            System.out.println("Selected id_SPCT: " + idSPCT);
-
+            int idSPCT = Integer.parseInt(tblHDCT.getValueAt(index, 1).toString());
+            // System.out.println("Selected id_SPCT: " + idSPCT);
             SanPham sp = sanPhamRepo.stream()
                     .filter(s -> s.getId_SPCT() == idSPCT)
                     .findFirst()
@@ -1133,6 +1139,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> cboHTTT;
     private javax.swing.JComboBox<String> cboKhuyenMai;
     private javax.swing.JComboBox<String> cboTenNV;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;

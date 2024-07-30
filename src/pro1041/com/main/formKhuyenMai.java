@@ -209,8 +209,7 @@ public class formKhuyenMai extends javax.swing.JPanel {
         jLabel7.setText("ĐƠN VỊ");
         jLabel7.setPreferredSize(new java.awt.Dimension(164, 20));
 
-        txtDonVi.setText("Giảm Tiền");
-        txtDonVi.setEnabled(false);
+        txtDonVi.setText("Giảm Theo %");
         txtDonVi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDonViActionPerformed(evt);
