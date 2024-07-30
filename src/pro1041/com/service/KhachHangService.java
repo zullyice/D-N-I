@@ -41,12 +41,43 @@ public class KhachHangService {
     }
 
     public List<KhachHang> selectkh(String makh) {
-        ArrayList<KhachHang> data = new ArrayList<>();
-        String Selete_All_sql = "SELECT * FROM KhachHang WHERE maKh LIKE ?";
+        List<KhachHang> data = new ArrayList<>();
+        String sql = """
+                     SELECT * FROM KhachHang WHERE maKh LIKE ?
+                     """;
         Connection cn = DBConnect.getConnection();
         try {
-            PreparedStatement ps = cn.prepareStatement(Selete_All_sql);
+            PreparedStatement ps = cn.prepareStatement(sql);
             ps.setString(1, makh);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                KhachHang h = new KhachHang();
+                h.setMaKh(rs.getString("maKh"));
+                h.setHoTenKh(rs.getString("hoTenKh"));
+                h.setDiaChi(rs.getString("diaChi"));
+                h.setSdt(rs.getString("sdt"));
+                h.setEmail(rs.getString("email"));
+                h.setGioiTinh(rs.getString("gioiTinh"));
+                data.add(h);
+            }
+        } catch (Exception e) {
+            System.out.print(e);
+        }
+        return data;
+    }
+
+    public List<KhachHang> timKiem(String makh) {
+        List<KhachHang> data = new ArrayList<>();
+        String sql = """
+                     SELECT * FROM KhachHang WHERE maKh LIKE ? or hoTenKh LIKE ? OR sdt = ? 
+                     """;
+        Connection cn = DBConnect.getConnection();
+        try {
+            PreparedStatement ps = cn.prepareStatement(sql);
+            ps.setString(1, makh);
+            ps.setString(2, makh);
+            ps.setString(3, makh);
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 KhachHang h = new KhachHang();

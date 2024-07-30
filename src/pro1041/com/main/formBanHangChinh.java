@@ -445,6 +445,12 @@ public class formBanHangChinh extends javax.swing.JPanel {
         jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jLabel8.setText("TÊN HÓA ĐƠN");
 
+        txtTenHD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTenHDActionPerformed(evt);
+            }
+        });
+
         jLabel9.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jLabel9.setText("TÊN NHÂN VIÊN");
 
@@ -1065,6 +1071,10 @@ public class formBanHangChinh extends javax.swing.JPanel {
         fh.setVisible(true);
         loadKH();
     }//GEN-LAST:event_btnKhachHangActionPerformed
+
+    private void txtTenHDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenHDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTenHDActionPerformed
     void loadKH() {
         dskh = khachHangService.selectkh(formThemKH.maKH);
         for (KhachHang kh : dskh) {

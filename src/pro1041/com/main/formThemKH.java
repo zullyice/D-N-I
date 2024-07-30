@@ -56,14 +56,12 @@ public class formThemKH extends javax.swing.JDialog {
 
     private void taoMa() {
         Random random = new Random();
-
-        for (int i = 0; i < 10; i++) {
-            int x = random.nextInt() + 10;
-            if (x < 0) {
-                x = x * -1;
-            }
-            maKH = "KH" + x;
+        StringBuilder sb = new StringBuilder("KH");
+        for (int i = 0; i < 4; i++) {
+            int x = random.nextInt(10);
+            sb.append(x);
         }
+        maKH = sb.toString();
     }
 
     void clearForm() {
@@ -136,9 +134,10 @@ public class formThemKH extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         txtPanel = new javax.swing.JTabbedPane();
         jDanhSach = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         spKH = new javax.swing.JScrollPane();
         tblKhachHang = new javax.swing.JTable();
+        txtTimKiem = new java.awt.TextField();
+        button1 = new java.awt.Button();
         jPanel3 = new javax.swing.JPanel();
         jADDKH = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -162,8 +161,6 @@ public class formThemKH extends javax.swing.JDialog {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jDanhSach.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel1.setText("DANH SÁCH KHÁCH HÀNG");
 
         spKH.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -189,6 +186,19 @@ public class formThemKH extends javax.swing.JDialog {
         });
         spKH.setViewportView(tblKhachHang);
 
+        txtTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTimKiemActionPerformed(evt);
+            }
+        });
+
+        button1.setLabel("RESET");
+        button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jDanhSachLayout = new javax.swing.GroupLayout(jDanhSach);
         jDanhSach.setLayout(jDanhSachLayout);
         jDanhSachLayout.setHorizontalGroup(
@@ -197,20 +207,22 @@ public class formThemKH extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jDanhSachLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDanhSachLayout.createSequentialGroup()
-                        .addComponent(spKH)
-                        .addContainerGap())
-                    .addGroup(jDanhSachLayout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 415, Short.MAX_VALUE))))
+                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spKH, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jDanhSachLayout.setVerticalGroup(
             jDanhSachLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDanhSachLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(14, 14, 14)
-                .addComponent(spKH, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
-                .addGap(30, 30, 30))
+                .addGap(20, 20, 20)
+                .addGroup(jDanhSachLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(spKH, javax.swing.GroupLayout.DEFAULT_SIZE, 303, Short.MAX_VALUE)
+                .addGap(16, 16, 16))
         );
 
         txtPanel.addTab("CHỌN KHÁCH HÀNG", jDanhSach);
@@ -415,6 +427,24 @@ public class formThemKH extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_spKHMouseClicked
 
+    private void txtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimKiemActionPerformed
+        String timKiem = txtTimKiem.getText().trim();
+        List<KhachHang> dstimKiem = khachHangService.timKiem(timKiem);
+        DefaultTableModel model = (DefaultTableModel) tblKhachHang.getModel();
+        model.setRowCount(0); // Clear existing rows if needed
+
+        for (KhachHang s : dstimKiem) {
+            model.addRow(new Object[]{
+                s.getMaKh(), s.getHoTenKh(), s.getGioiTinh(), s.getSdt(), s.getSdt(), s.getEmail(), s.getDiaChi()});
+        }
+
+    }//GEN-LAST:event_txtTimKiemActionPerformed
+
+    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+        listKhachHang = khachHangService.getAll();
+        fillToTable();
+    }//GEN-LAST:event_button1ActionPerformed
+
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -432,10 +462,10 @@ public class formThemKH extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnThem;
+    private java.awt.Button button1;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JPanel jADDKH;
     private javax.swing.JPanel jDanhSach;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -456,6 +486,7 @@ public class formThemKH extends javax.swing.JDialog {
     private javax.swing.JTextField txtMaKH;
     private javax.swing.JTabbedPane txtPanel;
     private javax.swing.JTextField txtSDT;
+    private java.awt.TextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
 
 }
