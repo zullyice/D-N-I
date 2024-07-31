@@ -408,6 +408,8 @@ public class formThemKH extends javax.swing.JDialog {
             clearForm();
             listKhachHang = khachHangService.getAll();
             fillToTable();
+            taoMa();
+            txtMaKH.setText(maKH);
         } else {
             JOptionPane.showMessageDialog(this, "Thêm không thành công");
         }
