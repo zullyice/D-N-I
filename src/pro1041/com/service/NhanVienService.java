@@ -141,7 +141,7 @@ public class NhanVienService {
         try {
             String query = """
                            SELECT [tenNhanVien]
-                             FROM [dbo].[NhanVien] WHERE trangThai = 1
+                             FROM [dbo].[NhanVien] WHERE trangThai = 1 
                            """;
             Connection cn = DBConnect.getConnection();
             PreparedStatement pst = cn.prepareStatement(query);

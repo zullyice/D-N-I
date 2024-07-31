@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -24,6 +25,7 @@ import pro1041.com.entity.HoaDonCho;
 import pro1041.com.entity.KhachHang;
 import pro1041.com.entity.KhuyenMai;
 import pro1041.com.entity.SanPham;
+import static pro1041.com.main.formThemKH.maKH;
 import pro1041.com.service.HoaDonService;
 import pro1041.com.service.KhachHangService;
 import pro1041.com.service.KhuyenMaiService;
@@ -48,11 +50,14 @@ public class formBanHangChinh extends javax.swing.JPanel {
     private List<SanPham> sanPhamRepo = sanPhamService.getAllSPBH();
     private List<KhachHang> dskh = new ArrayList<>();
     String maKH;
+    private String taiKhoan;
+    private String tenHoaDon;
 
     /**
      * Creates new form formBanHangChinh
      */
     public formBanHangChinh() {
+        this.taiKhoan = taiKhoan;
         initComponents();
         setSize(2000, 2000);
         loadSanPham();
@@ -60,6 +65,8 @@ public class formBanHangChinh extends javax.swing.JPanel {
         fillNhanVienComboBox();
         fillHTTTComboBox();
         fillTenKM();
+        createNameHD();
+        txtTenHD.setText(tenHoaDon);
         txtTienKhachDua.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
                 updateTienThua();
@@ -74,6 +81,17 @@ public class formBanHangChinh extends javax.swing.JPanel {
             }
         });
     }
+
+    private void createNameHD() {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder("Hóa Đơn ");
+        for (int i = 0; i < 4; i++) {
+            int x = random.nextInt(10);
+            sb.append(x);
+        }
+        tenHoaDon = sb.toString();
+    }
+
     private void xoaHoaDonDaThanhToan(int id) {
         DefaultTableModel dtmHoaDon = (DefaultTableModel) tblHoaDonCho.getModel();
         int rowCount = dtmHoaDon.getRowCount();
@@ -253,11 +271,12 @@ public class formBanHangChinh extends javax.swing.JPanel {
         DefaultTableModel dtmHDCT = (DefaultTableModel) tblHDCT.getModel();
         int selectedRow = tblHoaDonCho.getSelectedRow();
         if (selectedRow >= 0) {
+            System.out.println(selectedRow);
             int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn hủy đơn hàng?", "Xác nhận hủy đơn hàng", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 traLaiSanPham(idHoaDon);
                 dtmHoaDon.removeRow(selectedRow);
-                dtmHDCT.removeRow(selectedRow);
+                //dtmHDCT.removeRow(selectedRow);
                 DefaultTableModel dtmGioHang = (DefaultTableModel) tblHDCT.getModel();
                 int rowCount = dtmGioHang.getRowCount();
                 for (int i = rowCount - 1; i >= 0; i--) {
@@ -398,8 +417,9 @@ public class formBanHangChinh extends javax.swing.JPanel {
         jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jLabel7.setText("SỐ ĐIỆN THOẠI");
 
-        btnKhachHang.setBackground(new java.awt.Color(153, 0, 153));
+        btnKhachHang.setBackground(new java.awt.Color(0, 153, 153));
         btnKhachHang.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnKhachHang.setForeground(new java.awt.Color(51, 255, 255));
         btnKhachHang.setLabel("CHỌN");
         btnKhachHang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -442,9 +462,12 @@ public class formBanHangChinh extends javax.swing.JPanel {
                 .addContainerGap(10, Short.MAX_VALUE))
         );
 
+        btnKhachHang.getAccessibleContext().setAccessibleDescription("");
+
         jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jLabel8.setText("TÊN HÓA ĐƠN");
 
+        txtTenHD.setEnabled(false);
         txtTenHD.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTenHDActionPerformed(evt);
@@ -820,6 +843,10 @@ public class formBanHangChinh extends javax.swing.JPanel {
             return;
         }
         int id = hoaDonService.themHoaDonVaoDatabase(tenHD, trangThai);
+        clearFiel();
+        createNameHD();
+        txtTenHD.setText(tenHoaDon);
+
         if (id != -1) {
             xoaHoaDonDaThanhToan(id);
             loadHoadon();
@@ -835,6 +862,8 @@ public class formBanHangChinh extends javax.swing.JPanel {
                 int id = (int) tblHoaDonCho.getValueAt(selectedRow, 0);
                 huyHoaDon(id);
                 clearFiel();
+                createNameHD();
+                txtTenHD.setText(tenHoaDon);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Vui lòng chọn một hóa đơn để hủy.");

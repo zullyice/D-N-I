@@ -16,7 +16,7 @@ import pro1041.com.utils.DBConnect;
  * @author Tom
  */
 public class DangNhap extends javax.swing.JFrame {
-
+    private String taiKhoan;
     /**
      * Creates new form DangNhap
      */
