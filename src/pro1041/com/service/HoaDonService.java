@@ -86,35 +86,37 @@ public class HoaDonService {
     public List<HoaDon> getById(int idhd) {
         List<HoaDon> searchID = new ArrayList<>();
         String sql = """
-                 	 SELECT 
-                     sp.tenSanPham,
-                     hdct.soLuong,
-                     hdct.donGia,
-                     hdct.tongTien,
-                     hd.ngayTao ,
-                     sp.ngayTao 
-                 FROM 
-                     dbo.HoaDonChiTiet hdct
-                 INNER JOIN 
-                     HoaDon hd ON hdct.id_hoaDon = hd.id_hoaDon
-                 LEFT JOIN 
-                     SanPhamChiTiet spct ON hdct.id_SPCT = spct.id_SPCT
-                 LEFT JOIN 
-                     SanPham sp ON spct.id_sanPham = sp.id_sanPham
-                 WHERE 
-                     hd.id_hoaDon = ?;
+                 	   SELECT 
+                                              hd.id_hoaDon,
+                                              hdct.id_SPCT,
+                                              sp.tenSanPham,
+                                              hdct.soLuong,
+                                              hdct.donGia,
+                                              hdct.tongTien,
+                                              hd.ngayTao ,
+                                              sp.ngayTao 
+                                          FROM 
+                                              dbo.HoaDonChiTiet hdct
+                                          INNER JOIN 
+                                              HoaDon hd ON hdct.id_hoaDon = hd.id_hoaDon
+                                          LEFT JOIN 
+                                              SanPhamChiTiet spct ON hdct.id_SPCT = spct.id_SPCT
+                                          LEFT JOIN 
+                                              SanPham sp ON spct.id_sanPham = sp.id_sanPham
+                                          WHERE 
+                                              hd.id_hoaDon = ?;
                  """;
         try (Connection con = DBConnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idhd);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     HoaDon hdct = new HoaDon(
+                            rs.getInt("id_hoaDon"),
+                            rs.getInt("id_SPCT"),
                             rs.getString("tenSanPham"),
                             rs.getInt("soLuong"),
                             rs.getInt("donGia"),
-                            rs.getInt("tongTien"),
-                            rs.getDate("ngayTao"),
-                            rs.getDate("ngayTao")
+                            rs.getInt("tongTien")
                     );
                     searchID.add(hdct);
                 }
@@ -282,7 +284,7 @@ public class HoaDonService {
         return false;
     }
 
-    public void addHDCT(int idHD, SanPham sp) {
+    public void addHDCT(int idHD, int soLuongThem, SanPham sp) {
         String sql = """
                      INSERT INTO [dbo].[HoaDonChiTiet]
                                 ([id_hoaDon]
@@ -295,17 +297,59 @@ public class HoaDonService {
                           VALUES
                                 (?,?,?,?,?,?)
                      """;
-
         try (Connection con = DBConnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, idHD);
             ps.setInt(2, sp.getId_SPCT());
-            ps.setInt(3, sp.getSoluongtonkho());
+            ps.setInt(3, soLuongThem);
             ps.setInt(4, sp.getGia());
-            ps.setInt(5, sp.getSoluongtonkho() * sp.getGia());
+            ps.setInt(5, soLuongThem * sp.getGia());
             ps.setBoolean(6, true);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public HoaDon findHDCTByIdHDAndIdSPCT(int idHD, int idSPCT) {
+        // Chuẩn bị câu lệnh SQL để tìm kiếm HDCT dựa trên idHD và idSPCT
+        String sql = "SELECT * FROM HoaDonChiTiet WHERE id_hoaDon = ? AND id_SPCT = ?";
+        try (Connection conn = DBConnect.getConnection(); // Kết nối tới cơ sở dữ liệu
+                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Thiết lập tham số cho câu lệnh SQL
+            stmt.setInt(1, idHD);
+            stmt.setInt(2, idSPCT);
+
+            // Thực thi câu lệnh SQL và xử lý kết quả
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    // Nếu tìm thấy kết quả, tạo đối tượng HoaDonChiTiet và trả về
+                    HoaDon hdct = new HoaDon();
+                    hdct.setIdHoaDon(rs.getInt("id_hoaDon"));
+                    hdct.setIdSPCT(rs.getInt("id_SPCT"));
+                    hdct.setSoLuong(rs.getInt("soLuong"));
+                    // ... (các thuộc tính khác nếu có)
+                    return hdct;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // In lỗi ra console (có thể thay thế bằng logging)
+        }
+        // Trả về null nếu không tìm thấy hoặc có lỗi
+        return null;
+    }
+
+    public void deleteSanPhamFromHDCT(int idSPCT) {
+        String sql = "DELETE FROM HoaDonChiTiet WHERE Id_SPCT = ?";
+
+        try (Connection conn = DBConnect.getConnection(); // Thay thế với phương thức kết nối của bạn
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, idSPCT);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi xóa sản phẩm khỏi hóa đơn chi tiết.", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 

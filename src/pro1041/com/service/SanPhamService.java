@@ -654,5 +654,16 @@ public class SanPhamService {
             JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật số lượng sản phẩm trong cơ sở dữ liệu.", "Lỗi cập nhật", JOptionPane.ERROR_MESSAGE);
         }
     }
+    public void updateHDCTSoLuong(int id, int soLuongMoi) {
+        String sql = "UPDATE HoaDonChiTiet SET soLuong = ? WHERE id_SPCT = ?";
+        try (Connection con = DBConnect.getConnection(); PreparedStatement statement = con.prepareStatement(sql)) {
+            statement.setInt(1, soLuongMoi);
+            statement.setInt(2, id);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật số lượng sản phẩm trong cơ sở dữ liệu.", "Lỗi cập nhật", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     
 }
