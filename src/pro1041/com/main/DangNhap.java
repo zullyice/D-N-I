@@ -10,13 +10,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JFrame;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import pro1041.com.utils.DBConnect;
+
 /**
  *
  * @author Tom
  */
 public class DangNhap extends javax.swing.JFrame {
+
     public static String taiKhoan;
+
     /**
      * Creates new form DangNhap
      */
@@ -44,6 +49,18 @@ public class DangNhap extends javax.swing.JFrame {
             }
         }
         return false;
+    }
+
+    public void dangNhap() {
+        String username = txtUser.getText();
+        String password = new String(txtPass.getPassword());
+        if (authenticate(username, password)) {
+            JOptionPane.showMessageDialog(null, "Đăng nhập thành công !", "Success", JOptionPane.INFORMATION_MESSAGE);
+            new MainAction().setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu ", "Thông báo", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -88,6 +105,9 @@ public class DangNhap extends javax.swing.JFrame {
         btnDangNhap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pro1041/com/icon/login_3040755.png"))); // NOI18N
         btnDangNhap.setText("ĐĂNG NHẬP");
         btnDangNhap.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDangNhapMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnDangNhapMouseEntered(evt);
             }
@@ -110,6 +130,11 @@ public class DangNhap extends javax.swing.JFrame {
         txtPass.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 txtPassMouseEntered(evt);
+            }
+        });
+        txtPass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPassActionPerformed(evt);
             }
         });
 
@@ -204,34 +229,42 @@ public class DangNhap extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangNhapActionPerformed
-            String username = txtUser.getText();
-            String password = new String(txtPass.getPassword());
-            if (authenticate(username, password)) {
-                JOptionPane.showMessageDialog(null, "Đăng nhập thành công !","Success", JOptionPane.INFORMATION_MESSAGE);
-                new MainAction().setVisible(true);
-                this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu ","Thông báo", JOptionPane.ERROR_MESSAGE);
-            }
     }//GEN-LAST:event_btnDangNhapActionPerformed
 
     private void btnThoatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThoatActionPerformed
-        // TODO add your handling code here:
-           System.exit(0);
-        
+        System.exit(0);
+
     }//GEN-LAST:event_btnThoatActionPerformed
 
     private void btnDangNhapMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDangNhapMouseEntered
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnDangNhapMouseEntered
 
     private void txtPassMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPassMouseEntered
-        // TODO add your handling code here:
+        dangNhap();
     }//GEN-LAST:event_txtPassMouseEntered
 
     private void txtUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserActionPerformed
         // TODO add your handling code here:
+        String username = txtUser.getText();
+        String password = new String(txtPass.getPassword());
+        if (authenticate(username, password)) {
+            JOptionPane.showMessageDialog(null, "Đăng nhập thành công !", "Success", JOptionPane.INFORMATION_MESSAGE);
+            new MainAction().setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu ", "Thông báo", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_txtUserActionPerformed
+
+    private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassActionPerformed
+        // TODO add your handling code here:
+        dangNhap();
+    }//GEN-LAST:event_txtPassActionPerformed
+
+    private void btnDangNhapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDangNhapMouseClicked
+        // TODO add your handling code here:
+        dangNhap();
+    }//GEN-LAST:event_btnDangNhapMouseClicked
 
     /**
      * @param args the command line arguments
@@ -265,7 +298,7 @@ public class DangNhap extends javax.swing.JFrame {
             public void run() {
                 new DangNhap().setVisible(true);
             }
-            
+
         });
     }
 
