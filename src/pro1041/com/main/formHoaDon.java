@@ -28,7 +28,7 @@ public class formHoaDon extends javax.swing.JPanel {
     public formHoaDon() {
         initComponents();
         setSize(2000, 1500);
-        this.fill1(hoaDonService.getAll());
+        this.showHD(hoaDonService.getAll());
     }
 
     private void checkEditingStatus(JTable table) {
@@ -37,7 +37,7 @@ public class formHoaDon extends javax.swing.JPanel {
         }
     }
 
-    void fill1(List<HoaDon> list) {
+    void showHD(List<HoaDon> list) {
         dtm = (DefaultTableModel) tblHoaDon.getModel();
         dtm.setRowCount(0);
         for (HoaDon hoaDon : list) {
@@ -56,7 +56,7 @@ public class formHoaDon extends javax.swing.JPanel {
         }
     }
 
-    void showTable(List<HoaDon> list) {
+    void showTableHDCT(List<HoaDon> list) {
         tbm = (DefaultTableModel) tblHoaDonChiTiet.getModel();
         tbm.setRowCount(0);
         int stt = 1;
@@ -219,8 +219,8 @@ public class formHoaDon extends javax.swing.JPanel {
         int index = tblHoaDon.getSelectedRow();
         if (index != -1) {
             int id = Integer.parseInt(tblHoaDon.getValueAt(index, 0).toString());
-            List<HoaDon> dsct = hoaDonService.getById(id);
-            showTable(dsct);
+            List<HoaDon> dsct = hoaDonService.getByHD(id);
+            showTableHDCT(dsct);
         }
         checkEditingStatus(tblHoaDon);
     }//GEN-LAST:event_tblHoaDonMouseClicked
@@ -230,7 +230,7 @@ public class formHoaDon extends javax.swing.JPanel {
         Date ngayKT = this.ngayKT.getDate();
         if (ngayBD != null && ngayKT != null) {
             List<HoaDon> filteredHoaDons = hoaDonService.locTheoNgay(ngayBD, ngayKT);
-            fill1(filteredHoaDons);
+            showHD(filteredHoaDons);
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày hợp lệ để lọc", "Thông báo", JOptionPane.WARNING_MESSAGE);
         }

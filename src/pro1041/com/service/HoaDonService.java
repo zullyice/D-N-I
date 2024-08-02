@@ -92,9 +92,7 @@ public class HoaDonService {
                                               sp.tenSanPham,
                                               hdct.soLuong,
                                               hdct.donGia,
-                                              hdct.tongTien,
-                                              hd.ngayTao ,
-                                              sp.ngayTao 
+                                              hdct.tongTien
                                           FROM 
                                               dbo.HoaDonChiTiet hdct
                                           INNER JOIN 
@@ -125,6 +123,50 @@ public class HoaDonService {
             e.printStackTrace();
         }
         return searchID;
+    }
+
+    public List<HoaDon> getByHD(int idhd) {
+        List<HoaDon> searchbyHD = new ArrayList<>();
+        String sql = """
+                     SELECT 
+                                              hd.id_hoaDon,
+                                              hdct.id_SPCT,
+                                              sp.tenSanPham,
+                                              hdct.soLuong,
+                                              hdct.donGia,
+                                              hdct.tongTien,
+                                              hd.ngayTao ,
+                                              sp.ngayTao AS ngayTaoSP
+                                          FROM 
+                                              dbo.HoaDonChiTiet hdct
+                                          INNER JOIN 
+                                              HoaDon hd ON hdct.id_hoaDon = hd.id_hoaDon
+                                          LEFT JOIN 
+                                              SanPhamChiTiet spct ON hdct.id_SPCT = spct.id_SPCT
+                                          LEFT JOIN 
+                                              SanPham sp ON spct.id_sanPham = sp.id_sanPham
+                                          WHERE 
+                                              hd.id_hoaDon = ?;
+                 """;
+        try (Connection con = DBConnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idhd);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    HoaDon hdct = new HoaDon(
+                            rs.getString("tenSanPham"),
+                            rs.getInt("soLuong"),
+                            rs.getInt("donGia"),
+                            rs.getInt("tongTien"),
+                            rs.getDate("ngayTao"),
+                            rs.getDate("ngayTaoSP")
+                    );
+                    searchbyHD.add(hdct);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return searchbyHD;
     }
 
     public List<HoaDon> locTheoNgay(Date ngayBD, Date ngayKT) {
@@ -330,7 +372,7 @@ public class HoaDonService {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
         return null;
     }
@@ -340,8 +382,7 @@ public class HoaDonService {
                      DELETE FROM HoaDonChiTiet WHERE Id_SPCT = ?
                      """;
 
-        try (Connection conn = DBConnect.getConnection(); 
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnect.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idSPCT);
             ps.executeUpdate();
         } catch (SQLException e) {

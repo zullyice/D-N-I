@@ -16,7 +16,7 @@ import pro1041.com.utils.DBConnect;
  * @author Tom
  */
 public class DangNhap extends javax.swing.JFrame {
-    private String taiKhoan;
+    public static String taiKhoan;
     /**
      * Creates new form DangNhap
      */
@@ -77,6 +77,12 @@ public class DangNhap extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel3.setText("MẬT KHẨU");
+
+        txtUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtUserActionPerformed(evt);
+            }
+        });
 
         btnDangNhap.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         btnDangNhap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pro1041/com/icon/login_3040755.png"))); // NOI18N
@@ -222,6 +228,10 @@ public class DangNhap extends javax.swing.JFrame {
     private void txtPassMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPassMouseEntered
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPassMouseEntered
+
+    private void txtUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUserActionPerformed
 
     /**
      * @param args the command line arguments

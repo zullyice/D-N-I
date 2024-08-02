@@ -2092,49 +2092,49 @@ public class formSanPham extends javax.swing.JPanel {
             ChatLieu l = clDao.getAll().get(index);
             txtMaThuocTinh.setText(l.getMachatLieu());
             txtTenThuocTinh.setText(l.getTenchatLieu());
-            fillCL();
+            //fillCL();
         }
         if (rdoKichThuoc.isSelected()) {
             int index = tblBang.getSelectedRow();
             KichThuoc kt = kichDao.getAll().get(index);
             txtMaThuocTinh.setText(kt.getMaKichThuoc());
             txtTenThuocTinh.setText(kt.getTenKichThuoc());
-            fillKT();
+            //fillKT();
         }
         if (rdoMauSac.isSelected()) {
             int index = tblBang.getSelectedRow();
             MauSac ms = mauS.getALL().get(index);
             txtMaThuocTinh.setText(ms.getMaMauSac());
             txtTenThuocTinh.setText(ms.getTenMauSac());
-            fillMS();
+            //fillMS();
         }
         if (rdoThuongHieu.isSelected()) {
             int index = tblBang.getSelectedRow();
             ThuongHieu th = thuongHieuService.getAll().get(index);
             txtMaThuocTinh.setText(th.getMaThuonghieu());
             txtTenThuocTinh.setText(th.getTenThuongHieu());
-            fillTh();
+            //fillTh();
         }
         if (rdoNSX.isSelected()) {
             int index = tblBang.getSelectedRow();
             NhaSanXuat nsx = nhaSanXuatService.getAll().get(index);
             txtMaThuocTinh.setText(nsx.getMaNsx());
             txtTenThuocTinh.setText(nsx.getTenNsx());
-            fillNsx();
+            //fillNsx();
         }
         if (rdoKhoaAo.isSelected()) {
             int index = tblBang.getSelectedRow();
             KhoaAo ka = khoaAoService.getAll().get(index);
             txtMaThuocTinh.setText(ka.getMaKhoa());
             txtTenThuocTinh.setText(ka.getTenKhoa());
-            fillKa();
+            //fillKa();
         }
         if (rdoKieuDang.isSelected()) {
             int index = tblBang.getSelectedRow();
             KieuDang kd = kieuDangService.getAll().get(index);
             txtMaThuocTinh.setText(kd.getMaKieuDang());
             txtTenThuocTinh.setText(kd.getTenKieuDang());
-            fillKD();
+            //fillKD();
         }
     }//GEN-LAST:event_tblBangMouseClicked
 
