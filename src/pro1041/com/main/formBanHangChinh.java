@@ -219,48 +219,19 @@ public class formBanHangChinh extends javax.swing.JPanel {
         }
     }
 
-    private void traLaiSanPham(int idHD) {
-        List<HoaDon> hoaDonList = hoaDonService.getById(idHD);
-        if (hoaDonList != null) {
-            for (HoaDon hoaDon : hoaDonList) {
-                int rowCount = tblHDCT.getRowCount();
-                for (int row = 0; row < rowCount; row++) {
-                    int idSPCT = hoaDon.getIdSPCT();
-                    int soLuongHienCoHDCT = hoaDon.getSoLuong();
-                    int rowCountSPCT = tblSanPham.getRowCount();
-                    for (int i = 0; i < rowCountSPCT; i++) {
-                        int idSP = Integer.parseInt(tblSanPham.getValueAt(i, 0).toString());
-                        if (idSP == idSPCT) {
-                            int soLuongHienCoSP = getSoLuongTonKhoByIdSPCT(idSPCT);
-                            int soLuongMoi = soLuongHienCoSP + soLuongHienCoHDCT;
-                            System.out.println(soLuongMoi);
-                            tblSanPham.setValueAt(soLuongMoi, i, 2);
-                            sanPhamService.updateSanPhamSoLuong(idSP, soLuongMoi);
-                            break;
-                        }
-                    }
-                }
-                DefaultTableModel modelHDCT = (DefaultTableModel) tblHDCT.getModel();
-                modelHDCT.setRowCount(0);
-                gioHangMap.remove(idHD);
-            }
-            ((DefaultTableModel) tblSanPham.getModel()).fireTableDataChanged();
-            capNhatTongTien();
-        } else {
-            JOptionPane.showMessageDialog(null, "Không tìm thấy hóa đơn để trả hàng.", "Thông báo", JOptionPane.WARNING_MESSAGE);
-        }
-    }
-
     public void huyHoaDon(int idHoaDon) {
         String sqlDeleteHoaDonCT = "DELETE FROM HoaDonChiTiet WHERE id_hoaDon = ?";
         String sqlDeleteHoaDon = "DELETE FROM HoaDon WHERE id_hoaDon = ?";
+
         try (Connection con = DBConnect.getConnection()) {
             con.setAutoCommit(false);
             try (PreparedStatement psHDCT = con.prepareStatement(sqlDeleteHoaDonCT); PreparedStatement psHD = con.prepareStatement(sqlDeleteHoaDon)) {
+                sanPhamService.traLaiSanPham(idHoaDon, con);
                 psHDCT.setInt(1, idHoaDon);
                 psHDCT.executeUpdate();
                 psHD.setInt(1, idHoaDon);
                 psHD.executeUpdate();
+
                 con.commit();
             } catch (SQLException ex) {
                 con.rollback();
@@ -271,22 +242,10 @@ public class formBanHangChinh extends javax.swing.JPanel {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Lỗi kết nối cơ sở dữ liệu: " + ex.getMessage());
         }
+        DefaultTableModel dtmHoaDon = (DefaultTableModel) tblHoaDonCho.getModel();
         int selectedRow = tblHoaDonCho.getSelectedRow();
         if (selectedRow >= 0) {
-            traLaiSanPham(idHoaDon);
-            DefaultTableModel dtmHoaDon = (DefaultTableModel) tblHoaDonCho.getModel();
             dtmHoaDon.removeRow(selectedRow);
-            DefaultTableModel dtmGioHang = (DefaultTableModel) tblHDCT.getModel();
-            int rowCount = dtmGioHang.getRowCount();
-            for (int i = rowCount - 1; i >= 0; i--) {
-                dtmGioHang.removeRow(i);
-            }
-            capNhatTongTien();
-            clearFiel();
-            JOptionPane.showMessageDialog(null, "Hóa đơn đã được hủy.");
-
-        } else {
-            JOptionPane.showMessageDialog(null, "Vui lòng chọn một hóa đơn để hủy.");
         }
     }
 
@@ -401,12 +360,12 @@ public class formBanHangChinh extends javax.swing.JPanel {
         cboKhuyenMai = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        txtTenNhanVien = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblHoaDonCho = new javax.swing.JTable();
         btnTaoMoiHoaDonCho = new javax.swing.JButton();
         btnXoaHoaDonCho = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblSanPham = new javax.swing.JTable();
@@ -599,10 +558,8 @@ public class formBanHangChinh extends javax.swing.JPanel {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cboTenNV, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtTenNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(40, 40, 40))
+                                .addComponent(cboTenNV, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(124, 124, 124))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -647,8 +604,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(cboTenNV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTenNhanVien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cboTenNV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
@@ -692,11 +648,11 @@ public class formBanHangChinh extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID HÓA ĐƠN ", "TÊN HÓA ĐƠN", "TRẠNG THÁI", "NGÀY TẠO"
+                "ID HÓA ĐƠN ", "TÊN HÓA ĐƠN", "TRẠNG THÁI", "NGÀY TẠO", "TỔNG TIỀN ", "SỐ TIỀN GIẢM", "TỔNG TIỀN KHI GIẢM"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, true, true
+                false, false, true, true, true, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -731,6 +687,13 @@ public class formBanHangChinh extends javax.swing.JPanel {
             }
         });
 
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pro1041/com/icon/synchronize_2749336.png"))); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -738,17 +701,21 @@ public class formBanHangChinh extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnXoaHoaDonCho)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnTaoMoiHoaDonCho)
+                .addGap(18, 18, 18)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 765, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnXoaHoaDonCho)
-                    .addComponent(btnTaoMoiHoaDonCho))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnXoaHoaDonCho)
+                        .addComponent(btnTaoMoiHoaDonCho)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(14, Short.MAX_VALUE))
@@ -882,7 +849,6 @@ public class formBanHangChinh extends javax.swing.JPanel {
         clearFiel();
         createNameHD();
         txtTenHD.setText(tenHoaDon);
-
         if (id != -1) {
             xoaHoaDonDaThanhToan(id);
             loadHoadon();
@@ -896,7 +862,11 @@ public class formBanHangChinh extends javax.swing.JPanel {
             int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn hủy đơn hàng?", "Xác nhận hủy đơn hàng", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 int id = (int) tblHoaDonCho.getValueAt(selectedRow, 0);
+                List<SanPham> sanPhamList = sanPhamService.layDanhSachSanPhamCuaHoaDon(id);
+                sanPhamService.capNhatSoLuongTonKho(sanPhamList);
                 huyHoaDon(id);
+                loadSanPham();
+                loadHDCTTable(id);
                 clearFiel();
                 createNameHD();
                 txtTenHD.setText(tenHoaDon);
@@ -1149,6 +1119,14 @@ public class formBanHangChinh extends javax.swing.JPanel {
     private void cboTenNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTenNVActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cboTenNVActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        clearFiel();
+        loadHoadon();
+        createNameHD();
+        txtTenHD.setText(tenHoaDon);
+
+    }//GEN-LAST:event_jButton2ActionPerformed
     void loadKH() {
         dskh = khachHangService.selectkh(formThemKH.maKH);
         for (KhachHang kh : dskh) {
@@ -1256,6 +1234,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> cboKhuyenMai;
     private javax.swing.JComboBox<String> cboTenNV;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1285,7 +1264,6 @@ public class formBanHangChinh extends javax.swing.JPanel {
     private javax.swing.JTextField txtSoTienGiam;
     private javax.swing.JTextField txtTenHD;
     private javax.swing.JTextField txtTenKhachHang;
-    private javax.swing.JTextField txtTenNhanVien;
     private javax.swing.JTextField txtTienKhachDua;
     private javax.swing.JTextField txtTienThua;
     private javax.swing.JTextField txtTongTien;

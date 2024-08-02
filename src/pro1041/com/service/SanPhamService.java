@@ -686,4 +686,54 @@ public class SanPhamService {
         return soLuong;
     }
 
+    public List<SanPham> layDanhSachSanPhamCuaHoaDon(int id_HDCT) {
+        List<SanPham> sanPhamList = new ArrayList<>();
+        String sql = "SELECT * FROM HoaDonChiTiet WHERE id_HDCT = ?";
+        try (Connection cn = DBConnect.getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, id_HDCT);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                SanPham sp = new SanPham();
+                sp.setId_SPCT(rs.getInt("id_SPCT"));
+                sp.setSoluongtonkho(rs.getInt("soLuong"));
+                sanPhamList.add(sp);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sanPhamList;
+    }
+
+    public void capNhatSoLuongTonKho(List<SanPham> sanPhamList) {
+        for (SanPham sp : sanPhamList) {
+            String sql = "UPDATE SanPhamChiTiet SET soluongtonkho = soluongtonkho + ? WHERE id_SPCT = ?";
+            try (Connection cn = DBConnect.getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
+                ps.setInt(1, sp.getSoluongtonkho());
+                ps.setInt(2, sp.getId_SPCT());
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public void traLaiSanPham(int idHoaDon, Connection con) throws SQLException {
+        String sqlSelectSanPham = "SELECT id_SPCT, soLuong FROM HoaDonChiTiet WHERE id_hoaDon = ?; ";
+        String sqlUpdateSanPham = "UPDATE SanPhamChiTiet SET soluongtonkho = soluongtonkho + ? WHERE id_SPCT = ?";
+
+        try (PreparedStatement psSelect = con.prepareStatement(sqlSelectSanPham); PreparedStatement psUpdate = con.prepareStatement(sqlUpdateSanPham)) {
+            psSelect.setInt(1, idHoaDon);
+            ResultSet rs = psSelect.executeQuery();
+
+            while (rs.next()) {
+                int sanPhamId = rs.getInt("id_SPCT");
+                int soLuong = rs.getInt("soLuong");
+
+                psUpdate.setInt(1, soLuong);
+                psUpdate.setInt(2, sanPhamId);
+                psUpdate.executeUpdate();
+            }
+        }
+    }
 }
