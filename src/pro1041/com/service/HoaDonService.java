@@ -311,42 +311,39 @@ public class HoaDonService {
     }
 
     public HoaDon findHDCTByIdHDAndIdSPCT(int idHD, int idSPCT) {
-        // Chuẩn bị câu lệnh SQL để tìm kiếm HDCT dựa trên idHD và idSPCT
-        String sql = "SELECT * FROM HoaDonChiTiet WHERE id_hoaDon = ? AND id_SPCT = ?";
+        String sql = """
+                     SELECT * FROM HoaDonChiTiet WHERE id_hoaDon = ? AND id_SPCT = ?
+                     """;
         try (Connection conn = DBConnect.getConnection(); // Kết nối tới cơ sở dữ liệu
-                 PreparedStatement stmt = conn.prepareStatement(sql)) {
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            // Thiết lập tham số cho câu lệnh SQL
-            stmt.setInt(1, idHD);
-            stmt.setInt(2, idSPCT);
+            ps.setInt(1, idHD);
+            ps.setInt(2, idSPCT);
 
-            // Thực thi câu lệnh SQL và xử lý kết quả
-            try (ResultSet rs = stmt.executeQuery()) {
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    // Nếu tìm thấy kết quả, tạo đối tượng HoaDonChiTiet và trả về
                     HoaDon hdct = new HoaDon();
                     hdct.setIdHoaDon(rs.getInt("id_hoaDon"));
                     hdct.setIdSPCT(rs.getInt("id_SPCT"));
                     hdct.setSoLuong(rs.getInt("soLuong"));
-                    // ... (các thuộc tính khác nếu có)
                     return hdct;
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // In lỗi ra console (có thể thay thế bằng logging)
+            e.printStackTrace(); 
         }
-        // Trả về null nếu không tìm thấy hoặc có lỗi
         return null;
     }
 
     public void deleteSanPhamFromHDCT(int idSPCT) {
-        String sql = "DELETE FROM HoaDonChiTiet WHERE Id_SPCT = ?";
+        String sql = """
+                     DELETE FROM HoaDonChiTiet WHERE Id_SPCT = ?
+                     """;
 
-        try (Connection conn = DBConnect.getConnection(); // Thay thế với phương thức kết nối của bạn
-                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setInt(1, idSPCT);
-            pstmt.executeUpdate();
+        try (Connection conn = DBConnect.getConnection(); 
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idSPCT);
+            ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi xóa sản phẩm khỏi hóa đơn chi tiết.", "Lỗi", JOptionPane.ERROR_MESSAGE);

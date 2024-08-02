@@ -7,10 +7,12 @@ package pro1041.com.main;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import pro1041.com.entity.NhanVien;
+import static pro1041.com.main.formThemKH.maKH;
 import pro1041.com.service.NhanVienService;
 
 /**
@@ -22,6 +24,7 @@ public class formNhanVien extends javax.swing.JPanel {
     private NhanVienService nhanVienService = new NhanVienService();
     private DefaultTableModel tableModel = new DefaultTableModel();
     private List<NhanVien> dsnv = new ArrayList<>();
+    public static String maNV;
 
     /**
      * Creates new form formNhanVien
@@ -33,6 +36,8 @@ public class formNhanVien extends javax.swing.JPanel {
         tableModel = (DefaultTableModel) tblNhanVien.getModel();
         showData();
         clearForm();
+        taoMa();
+        txtMa.setText(maNV);
     }
 
     private void checkEditingStatus(JTable table) {
@@ -50,6 +55,16 @@ public class formNhanVien extends javax.swing.JPanel {
             });
 
         }
+    }
+
+    private void taoMa() {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder("NV");
+        for (int i = 0; i < 4; i++) {
+            int x = random.nextInt(10);
+            sb.append(x);
+        }
+        maNV = sb.toString();
     }
 
     void clearForm() {
@@ -112,6 +127,7 @@ public class formNhanVien extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel2.setText("MÃ NHÂN VIÊN");
 
+        txtMa.setEnabled(false);
         txtMa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMaActionPerformed(evt);
@@ -408,6 +424,8 @@ public class formNhanVien extends javax.swing.JPanel {
                 clearForm();
                 dsnv = nhanVienService.getAll();
                 showData();
+                taoMa();
+                txtMa.setText(maNV);
             } else {
                 JOptionPane.showMessageDialog(this, "Thêm không thành công");
             }
@@ -444,6 +462,8 @@ public class formNhanVien extends javax.swing.JPanel {
                 clearForm();
                 dsnv = nhanVienService.getAll();
                 showData();
+                taoMa();
+                txtMa.setText(maNV);
             } else {
                 JOptionPane.showMessageDialog(this, "Cập nhật thất bại");
             }
@@ -469,6 +489,8 @@ public class formNhanVien extends javax.swing.JPanel {
                 clearForm();
                 dsnv = nhanVienService.getAll();
                 showData();
+                taoMa();
+                txtMa.setText(maNV);
             } else {
                 JOptionPane.showMessageDialog(this, "Xóa thất bại");
             }

@@ -26,7 +26,6 @@ import pro1041.com.entity.HoaDonCho;
 import pro1041.com.entity.KhachHang;
 import pro1041.com.entity.KhuyenMai;
 import pro1041.com.entity.SanPham;
-import static pro1041.com.main.formThemKH.maKH;
 import pro1041.com.service.HoaDonService;
 import pro1041.com.service.KhachHangService;
 import pro1041.com.service.KhuyenMaiService;
@@ -50,15 +49,13 @@ public class formBanHangChinh extends javax.swing.JPanel {
     private Map<Integer, List<SanPham>> gioHangMap = new HashMap<>();
     private List<SanPham> sanPhamRepo = sanPhamService.getAllSPBH();
     private List<KhachHang> dskh = new ArrayList<>();
-    String maKH;
-    private String taiKhoan;
+    private String maKH;
     private String tenHoaDon;
 
     /**
      * Creates new form formBanHangChinh
      */
     public formBanHangChinh() {
-        this.taiKhoan = taiKhoan;
         initComponents();
         setSize(2500, 2000);
         loadSanPham();
@@ -96,7 +93,6 @@ public class formBanHangChinh extends javax.swing.JPanel {
     private void xoaHoaDonDaThanhToan(int id) {
         DefaultTableModel dtmHoaDon = (DefaultTableModel) tblHoaDonCho.getModel();
         int rowCount = dtmHoaDon.getRowCount();
-
         for (int i = 0; i < rowCount; i++) {
             int id_hoaDon = (int) dtmHoaDon.getValueAt(i, 0);
             if (id_hoaDon == id) {
@@ -223,23 +219,22 @@ public class formBanHangChinh extends javax.swing.JPanel {
     }
 
     private void traLaiSanPham(int idHD) {
-        List<HoaDon> hdctList = hoaDonService.getById(idHD);
-        System.out.println(hdctList);
-        if (hdctList != null) {
-            for (HoaDon hoaDon : hdctList) {
-                int rowCountHDCT = tblHDCT.getRowCount();
-                for (int row = 0; row < rowCountHDCT; row++) {
+        List<HoaDon> hoaDonList = hoaDonService.getById(idHD);
+        if (hoaDonList != null) {
+            for (HoaDon hoaDon : hoaDonList) {
+                int rowCount = tblHDCT.getRowCount();
+                for (int row = 0; row < rowCount; row++) {
                     int idSPCT = hoaDon.getIdSPCT();
-                    int soLuongTraLai = hoaDon.getSoLuong();
-                    int rowCount = tblSanPham.getRowCount();
-                    for (int i = 0; i < rowCount; i++) {
-                        int idSP = Integer.parseInt(tblSanPham.getValueAt(tblSanPham.getSelectedRow(), 0).toString());
+                    int soLuongHienCoHDCT = hoaDon.getSoLuong();
+                    int rowCountSPCT = tblSanPham.getRowCount();
+                    for (int i = 0; i < rowCountSPCT; i++) {
+                        int idSP = Integer.parseInt(tblSanPham.getValueAt(i, 0).toString());
                         if (idSP == idSPCT) {
-                            System.out.println(idSP);
-                            int soLuongHienCoSP = Integer.parseInt(tblSanPham.getValueAt(tblSanPham.getSelectedRow(), 2).toString());;
-                            int soLuongMoi = soLuongHienCoSP + soLuongTraLai;
+                            int soLuongHienCoSP = getSoLuongTonKhoByIdSPCT(idSPCT);
+                            int soLuongMoi = soLuongHienCoSP + soLuongHienCoHDCT;
+                            System.out.println(soLuongMoi);
                             tblSanPham.setValueAt(soLuongMoi, i, 2);
-                            sanPhamService.updateSanPhamSoLuong(idSPCT, soLuongMoi);
+                            sanPhamService.updateSanPhamSoLuong(idSP, soLuongMoi);
                             break;
                         }
                     }
@@ -257,9 +252,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
 
     public void huyHoaDon(int idHoaDon) {
         String sqlDeleteHoaDonCT = "DELETE FROM HoaDonChiTiet WHERE id_hoaDon = ?";
-
         String sqlDeleteHoaDon = "DELETE FROM HoaDon WHERE id_hoaDon = ?";
-
         try (Connection con = DBConnect.getConnection()) {
             con.setAutoCommit(false);
             try (PreparedStatement psHDCT = con.prepareStatement(sqlDeleteHoaDonCT); PreparedStatement psHD = con.prepareStatement(sqlDeleteHoaDon)) {
@@ -277,22 +270,20 @@ public class formBanHangChinh extends javax.swing.JPanel {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Lỗi kết nối cơ sở dữ liệu: " + ex.getMessage());
         }
-
-        DefaultTableModel dtmHoaDon = (DefaultTableModel) tblHoaDonCho.getModel();
         int selectedRow = tblHoaDonCho.getSelectedRow();
         if (selectedRow >= 0) {
-            int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn hủy đơn hàng?", "Xác nhận hủy đơn hàng", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                traLaiSanPham(idHoaDon);
-                dtmHoaDon.removeRow(selectedRow);
-                DefaultTableModel dtmGioHang = (DefaultTableModel) tblHDCT.getModel();
-                int rowCount = dtmGioHang.getRowCount();
-                for (int i = rowCount - 1; i >= 0; i--) {
-                    dtmGioHang.removeRow(i);
-                }
-                clearFiel();
-                JOptionPane.showMessageDialog(null, "Hóa đơn đã được hủy.");
+            traLaiSanPham(idHoaDon);
+            DefaultTableModel dtmHoaDon = (DefaultTableModel) tblHoaDonCho.getModel();
+            dtmHoaDon.removeRow(selectedRow);
+            DefaultTableModel dtmGioHang = (DefaultTableModel) tblHDCT.getModel();
+            int rowCount = dtmGioHang.getRowCount();
+            for (int i = rowCount - 1; i >= 0; i--) {
+                dtmGioHang.removeRow(i);
             }
+            capNhatTongTien();
+            clearFiel();
+            JOptionPane.showMessageDialog(null, "Hóa đơn đã được hủy.");
+
         } else {
             JOptionPane.showMessageDialog(null, "Vui lòng chọn một hóa đơn để hủy.");
         }
@@ -347,7 +338,6 @@ public class formBanHangChinh extends javax.swing.JPanel {
             }
         } else {
             JOptionPane.showMessageDialog(null, "Vui lòng chọn một hóa đơn để thanh toán.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-
         }
     }
 
@@ -1169,15 +1159,13 @@ public class formBanHangChinh extends javax.swing.JPanel {
     private int getRowInTblSanPhamByIdSPCT(int idSPCT) {
         DefaultTableModel model = (DefaultTableModel) tblSanPham.getModel();
         int rowCount = model.getRowCount();
-
         for (int i = 0; i < rowCount; i++) {
-            int idSPCTInTable = Integer.parseInt(model.getValueAt(i, 0).toString()); // Giả sử idSPCT ở cột đầu tiên
+            int idSPCTInTable = Integer.parseInt(tblSanPham.getValueAt(i, 0).toString());
             if (idSPCTInTable == idSPCT) {
                 return i;
             }
         }
-
-        return -1; // Trả về -1 nếu không tìm thấy
+        return -1;
     }
 
     private int getSoLuongHienCo(int selectedRow) {

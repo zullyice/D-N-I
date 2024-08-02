@@ -101,19 +101,19 @@ public class ChatLieuService {
         return 0;
     }
 
-    public int Delete(String machatLieu, int id) {
+    public boolean Delete(String ma ){
 
-        String sql = "UPDATE dbo.SanPhamChiTiet SET id_chatLieu = NULL WHERE id_chatLieu = ? DELETE FROM dbo.ChatLieu WHERE maChatLieu = ?;";
+        String sql = """
+                     DELETE FROM dbo.ChatLieu WHERE maChatLieu = ?
+                     """;
 
         try (Connection conn = dbconnect.getConnection(); PreparedStatement pst = conn.prepareCall(sql)) {
-            pst.setInt(1, id);
-            pst.setObject(2, machatLieu);
-            return pst.executeUpdate();
-
+            pst.setObject(1, ma);
+            return pst.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return 0;
+        return false;
     }
 
     

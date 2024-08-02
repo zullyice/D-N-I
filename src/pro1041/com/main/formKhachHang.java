@@ -7,6 +7,7 @@ package pro1041.com.main;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -22,6 +23,7 @@ public class formKhachHang extends javax.swing.JPanel {
     private KhachHangService khachHangService = new KhachHangService();
     private DefaultTableModel tbm = new DefaultTableModel();
     private List<KhachHang> dskh = new ArrayList<>();
+    public static String maKH;
 
     /**
      * Creates new form formKhachHang
@@ -33,12 +35,24 @@ public class formKhachHang extends javax.swing.JPanel {
         tbm = (DefaultTableModel) tblKhachHang.getModel();
         showDuLieu();
         clearForm();
+        taoMa();
+        txtMa.setText(maKH);
     }
 
     private void checkEditingStatus(JTable table) {
         boolean isEditing = table.isEditing();
         if (isEditing == false) {
         }
+    }
+
+    private void taoMa() {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder("KH");
+        for (int i = 0; i < 4; i++) {
+            int x = random.nextInt(10);
+            sb.append(x);
+        }
+        maKH = sb.toString();
     }
 
     public void showDuLieu() {
@@ -152,6 +166,7 @@ public class formKhachHang extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel2.setText("MÃ KHÁCH HÀNG");
 
+        txtMa.setEnabled(false);
         txtMa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMaActionPerformed(evt);
@@ -430,6 +445,8 @@ public class formKhachHang extends javax.swing.JPanel {
                 clearForm();
                 dskh = khachHangService.getAll();
                 showDuLieu();
+                taoMa();
+                txtMa.setText(maKH);
             } else {
                 JOptionPane.showMessageDialog(this, "Thêm không thành công");
             }
@@ -466,6 +483,8 @@ public class formKhachHang extends javax.swing.JPanel {
                 clearForm();
                 dskh = khachHangService.getAll();
                 showDuLieu();
+                taoMa();
+                txtMa.setText(maKH);
             } else {
                 JOptionPane.showMessageDialog(this, "Cập nhật thất bại");
             }
@@ -491,6 +510,8 @@ public class formKhachHang extends javax.swing.JPanel {
                 clearForm();
                 dskh = khachHangService.getAll();
                 showDuLieu();
+                taoMa();
+                txtMa.setText(maKH);
             } else {
                 JOptionPane.showMessageDialog(this, "Xóa thất bại");
             }

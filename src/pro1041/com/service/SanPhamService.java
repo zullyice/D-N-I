@@ -654,6 +654,7 @@ public class SanPhamService {
             JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật số lượng sản phẩm trong cơ sở dữ liệu.", "Lỗi cập nhật", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     public void updateHDCTSoLuong(int id, int soLuongMoi) {
         String sql = "UPDATE HoaDonChiTiet SET soLuong = ? WHERE id_SPCT = ?";
         try (Connection con = DBConnect.getConnection(); PreparedStatement statement = con.prepareStatement(sql)) {
@@ -665,5 +666,24 @@ public class SanPhamService {
             JOptionPane.showMessageDialog(null, "Có lỗi xảy ra khi cập nhật số lượng sản phẩm trong cơ sở dữ liệu.", "Lỗi cập nhật", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
+    public int getSoLuongTonKhoByIdSPCT(int idSPCT) {
+        int soLuong = 0;
+        String sql = "SELECT soluongtonkho FROM SanPhamChiTiet WHERE id_SPCT = ?";
+        try (Connection con = DBConnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idSPCT);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    soLuong = rs.getInt("soluongtonkho");
+                } else {
+                    System.out.println("Không tìm thấy sản phẩm với idSPCT: " + idSPCT);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Lỗi kết nối cơ sở dữ liệu: " + ex.getMessage());
+        }
+        return soLuong;
+    }
+
 }
