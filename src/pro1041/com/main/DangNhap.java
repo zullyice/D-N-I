@@ -10,8 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JFrame;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import pro1041.com.utils.DBConnect;
 
 /**
@@ -240,29 +238,18 @@ public class DangNhap extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDangNhapMouseEntered
 
     private void txtPassMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPassMouseEntered
-        dangNhap();
     }//GEN-LAST:event_txtPassMouseEntered
 
     private void txtUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserActionPerformed
         // TODO add your handling code here:
-        String username = txtUser.getText();
-        String password = new String(txtPass.getPassword());
-        if (authenticate(username, password)) {
-            JOptionPane.showMessageDialog(null, "Đăng nhập thành công !", "Success", JOptionPane.INFORMATION_MESSAGE);
-            new MainAction().setVisible(true);
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu ", "Thông báo", JOptionPane.ERROR_MESSAGE);
-        }
+        dangNhap();
     }//GEN-LAST:event_txtUserActionPerformed
 
     private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassActionPerformed
-        // TODO add your handling code here:
         dangNhap();
     }//GEN-LAST:event_txtPassActionPerformed
 
     private void btnDangNhapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDangNhapMouseClicked
-        // TODO add your handling code here:
         dangNhap();
     }//GEN-LAST:event_btnDangNhapMouseClicked
 

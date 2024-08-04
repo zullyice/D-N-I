@@ -409,7 +409,7 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtDonVi">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Gi&#x1ea3;m Theo %"/>
+                    <Property name="text" type="java.lang.String" value="%"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtDonViActionPerformed"/>
