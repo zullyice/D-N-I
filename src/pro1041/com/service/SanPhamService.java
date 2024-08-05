@@ -736,4 +736,64 @@ public class SanPhamService {
             }
         }
     }
+
+    public List<SanPham> getAllSPBHTimKiem(String ten) {
+        String sql = """
+                     SELECT 
+                         spc.id_SPCT,
+                         sp.tenSanPham,
+                     	    spc.soluongtonkho,
+                            spc.gia,
+                            th.tenThuongHieu,
+                             nsx.tenNSX,
+                            cl.tenChatLieu,
+                            kt.tenKichThuoc,
+                            ka.tenKhoa,
+                            kd.tenKieuDang,
+                            ms.tenMauSac
+                     FROM 
+                         SanPham sp
+                     JOIN 
+                         SanPhamChiTiet spc ON sp.id_sanPham = spc.id_sanPham
+                     JOIN 
+                         NhaSanXuat nsx ON sp.id_NSX = nsx.id_NSX
+                     JOIN 
+                         ThuongHieu th ON sp.id_thuongHieu = th.id_thuongHieu
+                     	JOIN 
+                     	ChatLieu cl ON spc.id_chatLieu = cl.id_chatLieu
+                     	JOIN 
+                     	KieuDang kd ON spc.id_kieuDang = kd.id_kieuDang
+                     	JOIN 
+                     	KichThuoc kt ON spc.id_kichThuoc = kt.id_kichThuoc
+                     	JOIN 
+                     	MauSac ms ON spc.id_mauSac = ms.id_mauSac
+                        JOIN 
+                        KhoaAo ka ON spc.id_khoaAo = ka.id_khoaAo
+                     WHERE sp.tenSanPham LIKE ?  
+                     """;
+        try (Connection con = DBConnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, "%" + ten + "%");
+            ResultSet rs = ps.executeQuery();
+            List<SanPham> dssp = new ArrayList<>();
+            while (rs.next()) {
+                SanPham sp = new SanPham(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getString(8),
+                        rs.getString(9),
+                        rs.getString(10),
+                        rs.getString(11));
+                dssp.add(sp);
+            }
+            return dssp;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

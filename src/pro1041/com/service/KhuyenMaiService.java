@@ -7,7 +7,6 @@ package pro1041.com.service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import pro1041.com.entity.KhuyenMai;
