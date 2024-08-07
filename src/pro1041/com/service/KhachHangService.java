@@ -74,8 +74,8 @@ public class KhachHangService {
         Connection cn = DBConnect.getConnection();
         try {
             PreparedStatement ps = cn.prepareStatement(sql);
-            ps.setString(1, makh);
-            ps.setString(2, makh);
+            ps.setString(1, "%"+makh+ "%");
+            ps.setString(2, "%"+makh+ "%");
             ps.setString(3, makh);
 
             ResultSet rs = ps.executeQuery();

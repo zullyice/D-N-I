@@ -293,8 +293,16 @@ public class HoaDonService {
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         try {
             String query = """
-                           SELECT [tenKM]
-                             FROM [dbo].[KhuyenMai] WHERE trangThai = 1
+                           SELECT [id_khuyenMai]
+                                 ,[tenKM]
+                                 ,[ngayBatDau]
+                                 ,[ngayKetThuc]
+                                 ,[giaTri]
+                                 ,[donVi]
+                                 ,[trangThai]
+                                 ,[ngayTao]
+                                 ,[ngaySua]
+                           	    FROM [PRO1041_SD19308].[dbo].[KhuyenMai] WHERE ngayKetThuc > GETDATE()
                            """;
             Connection cn = DBConnect.getConnection();
             PreparedStatement pst = cn.prepareStatement(query);

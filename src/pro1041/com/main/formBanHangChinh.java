@@ -657,11 +657,11 @@ public class formBanHangChinh extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID HÓA ĐƠN ", "TÊN HÓA ĐƠN", "TRẠNG THÁI", "NGÀY TẠO", "TỔNG TIỀN ", "SỐ TIỀN GIẢM", "TỔNG TIỀN KHI GIẢM"
+                "ID HÓA ĐƠN ", "TÊN HÓA ĐƠN", "TRẠNG THÁI", "NGÀY TẠO"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, true, true, true, true, true
+                false, false, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1062,12 +1062,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(null, "Giỏ hàng không có sản phẩm để thanh toán", "Thông báo", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            String ma = txtTenKhachHang.getText().trim();
-            String sdt = txtSdt.getText().trim();
-            if (ma.isEmpty() && sdt.isEmpty() && ma.isBlank() && sdt.isBlank()) {
-                JOptionPane.showMessageDialog(this, "Tên và mã khách hàng không được để trống", "Thông báo", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+            
             double tongTien = tinhTongTienGioHang();
             double giamGia = 0;
             String giaTri = txtGiaTriGiam.getText().trim();

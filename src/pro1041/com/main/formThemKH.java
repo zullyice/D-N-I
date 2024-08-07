@@ -33,7 +33,7 @@ public class formThemKH extends javax.swing.JDialog {
         model.setRowCount(0);
         for (KhachHang s : listKhachHang) {
             model.addRow(new Object[]{
-                s.getMaKh(), s.getHoTenKh(), s.getGioiTinh(), s.getSdt(), s.getSdt(), s.getEmail(), s.getDiaChi()});
+                s.getMaKh(), s.getHoTenKh(), s.getGioiTinh(), s.getNgayTao(), s.getSdt(), s.getDiaChi()});
         }
     }
 

@@ -4,6 +4,8 @@
  */
 package pro1041.com.main;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,8 +45,16 @@ public class formKhuyenMai extends javax.swing.JPanel {
 
     public void showDuLieu() {
         tblModel.setRowCount(0);
+        LocalDate today = LocalDate.now();
+        Date todayDate = Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant()); // Convert LocalDate to Date
         for (KhuyenMai km : dskm) {
-            String trangThai = km.getTrangThai() == true ? "Đang hoạt động" : "Hết hạn";
+            Date ngayKetThuc = km.getNgayKetThuc();
+            String trangThai;
+            if(ngayKetThuc.after(todayDate)){
+                trangThai = "Đang Hoạt Động";
+            }else{
+                trangThai = "Hết hạn";
+            }
             tblModel.addRow(new Object[]{
                 km.getId_khuyenMai(), km.getTenKM(), km.getNgayBatDau(), km.getNgayKetThuc(), km.getGiaTri(), km.getDonVi(), trangThai, km.getNgayTao(), km.getNgaySua()
             });
@@ -61,8 +71,8 @@ public class formKhuyenMai extends javax.swing.JPanel {
         jNgayKetThuc.setDate(now);
         jNgayTao.setDate(now);
         jNgaySua.setDate(now);
-        rdoDangHoatDong.setSelected(false);
-        rdoHetHan.setSelected(false);
+        //rdoDangHoatDong.setSelected(false);
+        //rdoHetHan.setSelected(false);
     }
     
     /**
@@ -97,9 +107,6 @@ public class formKhuyenMai extends javax.swing.JPanel {
         jLabel7 = new javax.swing.JLabel();
         txtGiaTri = new javax.swing.JTextField();
         txtDonVi = new javax.swing.JTextField();
-        jLabel16 = new javax.swing.JLabel();
-        rdoDangHoatDong = new javax.swing.JRadioButton();
-        rdoHetHan = new javax.swing.JRadioButton();
         jLabel6 = new javax.swing.JLabel();
         jNgayTao = new com.toedter.calendar.JDateChooser();
         jLabel9 = new javax.swing.JLabel();
@@ -246,25 +253,6 @@ public class formKhuyenMai extends javax.swing.JPanel {
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        jLabel16.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel16.setText("TRẠNG THÁI");
-
-        buttonGroup1.add(rdoDangHoatDong);
-        rdoDangHoatDong.setText("Đang Hoạt Động");
-        rdoDangHoatDong.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdoDangHoatDongActionPerformed(evt);
-            }
-        });
-
-        buttonGroup1.add(rdoHetHan);
-        rdoHetHan.setText("Hết hạn");
-        rdoHetHan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdoHetHanActionPerformed(evt);
-            }
-        });
-
         jLabel6.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel6.setText("NGÀY TẠO");
 
@@ -305,14 +293,7 @@ public class formKhuyenMai extends javax.swing.JPanel {
                             .addComponent(jNgayBatDau, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
                             .addComponent(jNgayKetThuc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addComponent(jLabel16)
-                                .addGap(34, 34, 34)
-                                .addComponent(rdoDangHoatDong)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(rdoHetHan)))
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(14, 14, 14))))
         );
         jPanel7Layout.setVerticalGroup(
@@ -332,14 +313,8 @@ public class formKhuyenMai extends javax.swing.JPanel {
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jNgayKetThuc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel16)
-                            .addComponent(rdoDangHoatDong)
-                            .addComponent(rdoHetHan))))
-                .addGap(18, 18, 18)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jNgayTao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -397,14 +372,6 @@ public class formKhuyenMai extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void rdoHetHanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoHetHanActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rdoHetHanActionPerformed
-
-    private void rdoDangHoatDongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoDangHoatDongActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rdoDangHoatDongActionPerformed
 
     private void txtDonViActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDonViActionPerformed
         // TODO add your handling code here:
@@ -543,7 +510,7 @@ public class formKhuyenMai extends javax.swing.JPanel {
         Date ketThuc = jNgayKetThuc.getDate();
         Date ngayTao = jNgayTao.getDate();
         Date ngaySua = jNgaySua.getDate();
-        Boolean trangThai = rdoDangHoatDong.isSelected();
+        //Boolean trangThai = rdoDangHoatDong.isSelected();
 
         km.setDonVi(donVi);
         km.setGiaTri(Double.valueOf(giaTri));
@@ -553,7 +520,7 @@ public class formKhuyenMai extends javax.swing.JPanel {
         km.setTenKM(ten);
         km.setNgayTao(ngayTao);
         km.setNgaySua(ngaySua);
-        km.setTrangThai(trangThai);
+//        km.setTrangThai(trangThai);
         return km;
     }
 
@@ -566,14 +533,14 @@ public class formKhuyenMai extends javax.swing.JPanel {
         jNgayKetThuc.setDate(km.getNgayKetThuc());
         jNgayTao.setDate(km.getNgayTao());
         jNgaySua.setDate(km.getNgaySuaOrDefault());
-        Boolean trangThai = km.getTrangThai();
-        if (trangThai == true) {
-            rdoDangHoatDong.setSelected(true);
-            rdoHetHan.setSelected(false);
-        } else {
-            rdoDangHoatDong.setSelected(false);
-            rdoHetHan.setSelected(true);
-        }
+//        Boolean trangThai = km.getTrangThai();
+//        if (trangThai == true) {
+//            rdoDangHoatDong.setSelected(true);
+//            rdoHetHan.setSelected(false);
+//        } else {
+//            rdoDangHoatDong.setSelected(false);
+//            rdoHetHan.setSelected(true);
+//        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -584,7 +551,6 @@ public class formKhuyenMai extends javax.swing.JPanel {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -601,8 +567,6 @@ public class formKhuyenMai extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JRadioButton rdoDangHoatDong;
-    private javax.swing.JRadioButton rdoHetHan;
     private javax.swing.JTable tblKhuyenMai;
     private javax.swing.JTextField txtDonVi;
     private javax.swing.JTextField txtGiaTri;

@@ -53,7 +53,7 @@ public class DangNhap extends javax.swing.JFrame {
         String username = txtUser.getText();
         String password = new String(txtPass.getPassword());
         if (authenticate(username, password)) {
-            JOptionPane.showMessageDialog(null, "Đăng nhập thành công !", "Success", JOptionPane.INFORMATION_MESSAGE);
+            //JOptionPane.showMessageDialog(null, "Đăng nhập thành công !", "Success", JOptionPane.INFORMATION_MESSAGE);
             new MainAction().setVisible(true);
             this.dispose();
         } else {
