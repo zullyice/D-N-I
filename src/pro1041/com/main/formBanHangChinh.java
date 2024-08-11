@@ -283,7 +283,7 @@ public class formBanHangChinh extends javax.swing.JPanel {
 
             String tenNV = String.valueOf(cboTenNV.getSelectedItem());
             String loaiTT = String.valueOf(cboHTTT.getSelectedItem());
-            String tenKH = txtTenKhachHang.getText();
+            String tenKH = txtTenKhachHang.getText().trim();
             try {
                 HoaDon don = new HoaDon(idHD, tenNV, tenKH, loaiTT);
                 hoaDonService.updateTrangThaiHoaDon(idHD, true, don);

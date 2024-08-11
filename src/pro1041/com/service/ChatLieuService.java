@@ -107,7 +107,7 @@ public class ChatLieuService {
                      DELETE FROM dbo.ChatLieu WHERE maChatLieu = ?
                      """;
 
-        try (Connection conn = dbconnect.getConnection(); PreparedStatement pst = conn.prepareCall(sql)) {
+        try (Connection conn = DBConnect.getConnection(); PreparedStatement pst = conn.prepareCall(sql)) {
             pst.setObject(1, ma);
             return pst.executeUpdate() > 0;
         } catch (Exception e) {

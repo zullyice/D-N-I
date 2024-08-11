@@ -2171,8 +2171,6 @@ public class formSanPham extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu cần xóa.", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-
-            //String ma = tblBang.getValueAt(selectedRow, 1).toString();
             int dialogResult = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa dữ liệu này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
             if (dialogResult == JOptionPane.YES_OPTION) {
                 if (clDao.Delete(maThuocTinh)) {
@@ -2197,6 +2195,187 @@ public class formSanPham extends javax.swing.JPanel {
                 showData();
             }
         }
+        if (rdoKichThuoc.isSelected()) {
+            int selectedRow = tblBang.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu cần xóa.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            int dialogResult = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa dữ liệu này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                if (kichDao.Delete(maThuocTinh)) {
+                    JOptionPane.showMessageDialog(this, "Xóa thành công");
+                    fillKT();
+                    clearformTT();
+                    dssp = sanPhamService.getAll();
+                    fillChatLieuComboBox();
+                    fillKhoaAoComboBox();
+                    fillKieuDangComboBox();
+                    fillKichThuocComboBox();
+                    fillMauSacComboBox();
+                    fillThuongHieuComboBox();
+                    fillNSXComboBox();
+                    showDuLieu();
+                    taoMaKT();
+                    txtMaThuocTinh.setText(maKT);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Xóa thất bại");
+                }
+            } else {
+                showData();
+            }
+        }
+        if (rdoKhoaAo.isSelected()) {
+            int selectedRow = tblBang.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu cần xóa.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            int dialogResult = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa dữ liệu này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                if (khoaAoService.Delete(maThuocTinh)) {
+                    JOptionPane.showMessageDialog(this, "Xóa thành công");
+                    fillKa();
+                    clearformTT();
+                    dssp = sanPhamService.getAll();
+                    fillChatLieuComboBox();
+                    fillKhoaAoComboBox();
+                    fillKieuDangComboBox();
+                    fillKichThuocComboBox();
+                    fillMauSacComboBox();
+                    fillThuongHieuComboBox();
+                    fillNSXComboBox();
+                    showDuLieu();
+                    taoMaKA();
+                    txtMaThuocTinh.setText(maKA);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Xóa thất bại");
+                }
+            } else {
+                showData();
+            }
+        }
+        if (rdoKieuDang.isSelected()) {
+            int selectedRow = tblBang.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu cần xóa.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            int dialogResult = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa dữ liệu này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                if (kieuDangService.Delete(maThuocTinh)) {
+                    JOptionPane.showMessageDialog(this, "Xóa thành công");
+                    fillKD();
+                    clearformTT();
+                    dssp = sanPhamService.getAll();
+                    fillChatLieuComboBox();
+                    fillKhoaAoComboBox();
+                    fillKieuDangComboBox();
+                    fillKichThuocComboBox();
+                    fillMauSacComboBox();
+                    fillThuongHieuComboBox();
+                    fillNSXComboBox();
+                    showDuLieu();
+                    taoMaKD();
+                    txtMaThuocTinh.setText(maKD);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Xóa thất bại");
+                }
+            } else {
+                showData();
+            }
+        }
+        if (rdoMauSac.isSelected()) {
+            int selectedRow = tblBang.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu cần xóa.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            int dialogResult = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa dữ liệu này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                if (mauS.Delete(maThuocTinh)) {
+                    JOptionPane.showMessageDialog(this, "Xóa thành công");
+                    fillMS();
+                    clearformTT();
+                    dssp = sanPhamService.getAll();
+                    fillChatLieuComboBox();
+                    fillKhoaAoComboBox();
+                    fillKieuDangComboBox();
+                    fillKichThuocComboBox();
+                    fillMauSacComboBox();
+                    fillThuongHieuComboBox();
+                    fillNSXComboBox();
+                    showDuLieu();
+                    taoMaMS();
+                    txtMaThuocTinh.setText(maMS);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Xóa thất bại");
+                }
+            } else {
+                showData();
+            }
+        }
+        if (rdoNSX.isSelected()) {
+            int selectedRow = tblBang.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu cần xóa.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            int dialogResult = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa dữ liệu này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                if (nhaSanXuatService.Delete(maThuocTinh)) {
+                    JOptionPane.showMessageDialog(this, "Xóa thành công");
+                    fillNsx();
+                    clearformTT();
+                    dssp = sanPhamService.getAll();
+                    fillChatLieuComboBox();
+                    fillKhoaAoComboBox();
+                    fillKieuDangComboBox();
+                    fillKichThuocComboBox();
+                    fillMauSacComboBox();
+                    fillThuongHieuComboBox();
+                    fillNSXComboBox();
+                    showDuLieu();
+                    taoMaNSX();
+                    txtMaThuocTinh.setText(maNSX);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Xóa thất bại");
+                }
+            } else {
+                showData();
+            }
+        }
+        if (rdoThuongHieu.isSelected()) {
+            int selectedRow = tblBang.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn dữ liệu cần xóa.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            int dialogResult = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa dữ liệu này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                if (thuongHieuService.Delete(maThuocTinh)) {
+                    JOptionPane.showMessageDialog(this, "Xóa thành công");
+                    fillTh();
+                    clearformTT();
+                    dssp = sanPhamService.getAll();
+                    fillChatLieuComboBox();
+                    fillKhoaAoComboBox();
+                    fillKieuDangComboBox();
+                    fillKichThuocComboBox();
+                    fillMauSacComboBox();
+                    fillThuongHieuComboBox();
+                    fillNSXComboBox();
+                    showDuLieu();
+                    taoMaTH();
+                    txtMaThuocTinh.setText(maTH);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Xóa thất bại");
+                }
+            } else {
+                showData();
+            }
+        }
+
 
     }//GEN-LAST:event_btnXoaTTMouseClicked
     public void showDetail(int index) {

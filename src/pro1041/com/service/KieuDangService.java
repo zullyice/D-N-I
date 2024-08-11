@@ -82,4 +82,18 @@ public class KieuDangService {
         }
         return false;
     }
+    public boolean Delete(String ma ){
+
+        String sql = """
+                     DELETE FROM dbo.KieuDang WHERE maKieuDang = ?
+                     """;
+
+        try (Connection conn = DBConnect.getConnection(); PreparedStatement pst = conn.prepareCall(sql)) {
+            pst.setObject(1, ma);
+            return pst.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

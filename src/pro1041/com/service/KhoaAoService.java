@@ -65,22 +65,21 @@ public class KhoaAoService {
         }
     }
 
-     public int Update(KhoaAo ka,String ma) {
+    public int Update(KhoaAo ka, String ma) {
         String sql = "UPDATE dbo.KhoaAo SET tenKhoa = ? WHERE maKhoa = ?";
-    
-    try (java.sql.Connection con = DBConnect.getConnection();
-         PreparedStatement pst = con.prepareStatement(sql)) {
-        
-        pst.setString(1, ka.getTenKhoa());
-        pst.setString(2, ma);
-        
-        return pst.executeUpdate();
-        
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    
-    return 0;
+
+        try (java.sql.Connection con = DBConnect.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
+
+            pst.setString(1, ka.getTenKhoa());
+            pst.setString(2, ma);
+
+            return pst.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
     }
 
     public boolean xoa(int id) {
@@ -103,6 +102,7 @@ public class KhoaAoService {
             return false;
         }
     }
+
     public boolean checkIdTrung(String id) {
         String sql = "SELECT COUNT(*) AS count FROM dbo.KhoaAo WHERE maKhoa = ?";
         try (java.sql.Connection conn = DBConnect.getConnection(); PreparedStatement pst = conn.prepareCall(sql)) {
@@ -119,4 +119,18 @@ public class KhoaAoService {
         return false;
     }
 
+    public boolean Delete(String ma) {
+
+        String sql = """
+                     DELETE FROM dbo.KhoaAo WHERE maKhoa = ?
+                     """;
+
+        try (java.sql.Connection conn = DBConnect.getConnection(); PreparedStatement pst = conn.prepareCall(sql)) {
+            pst.setObject(1, ma);
+            return pst.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
