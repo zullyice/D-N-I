@@ -49,7 +49,7 @@ public class MainAction extends javax.swing.JFrame {
     private void initComponents() {
 
         jpn = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         JPfull = new javax.swing.JPanel();
         JPnew = new javax.swing.JPanel();
         JPhoadon = new javax.swing.JPanel();
@@ -72,8 +72,8 @@ public class MainAction extends javax.swing.JFrame {
 
         jpn.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pro1041/com/icon/444480697_832598928836860_6639453551569439733_n.jpg"))); // NOI18N
-        jpn.add(jLabel1, java.awt.BorderLayout.CENTER);
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pro1041/com/icon/BG1.jpg"))); // NOI18N
+        jpn.add(jLabel2, java.awt.BorderLayout.CENTER);
 
         JPfull.setBackground(new java.awt.Color(0, 153, 153));
 
@@ -469,7 +469,7 @@ public class MainAction extends javax.swing.JFrame {
     private javax.swing.JLabel jBanHang;
     private javax.swing.JLabel jDangXuat;
     private javax.swing.JLabel jHoaDon;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

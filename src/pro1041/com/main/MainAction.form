@@ -50,10 +50,10 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="jLabel1">
+        <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/pro1041/com/icon/444480697_832598928836860_6639453551569439733_n.jpg"/>
+              <Image iconType="3" name="/pro1041/com/icon/BG1.jpg"/>
             </Property>
           </Properties>
           <Constraints>

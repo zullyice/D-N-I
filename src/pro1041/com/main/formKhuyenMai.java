@@ -46,7 +46,7 @@ public class formKhuyenMai extends javax.swing.JPanel {
     public void showDuLieu() {
         tblModel.setRowCount(0);
         LocalDate today = LocalDate.now();
-        Date todayDate = Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant()); // Convert LocalDate to Date
+        Date todayDate = Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant()); 
         for (KhuyenMai km : dskm) {
             Date ngayKetThuc = km.getNgayKetThuc();
             String trangThai;
